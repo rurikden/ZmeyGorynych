@@ -1,8 +1,8 @@
 package com.example.zmeygorynych
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,7 +17,8 @@ class MainActivity : AppCompatActivity() {
         // Настройка обработчика нажатия кнопки
         val btnWork = findViewById<Button>(R.id.btnWork)
         btnWork.setOnClickListener {
-            Toast.makeText(this, "Кнопка 'Работа' нажата!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, WorkActivity::class.java)
+            startActivity(intent)
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
