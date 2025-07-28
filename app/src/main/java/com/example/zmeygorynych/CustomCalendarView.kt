@@ -21,10 +21,19 @@ class CustomCalendarView @JvmOverloads constructor(
     private val calendar = Calendar.getInstance()
     private val dateFormat = SimpleDateFormat("dd", Locale.getDefault())
     private var onDateSelectedListener: ((Int, Int, Int) -> Unit)? = null
+    private var onMonthYearChangedListener: ((Int, Int) -> Unit)? = null
     private var selectedDate: Calendar = Calendar.getInstance()
+    private var currentSelectedDate: Calendar = Calendar.getInstance()
+    private var appSettings: AppSettings? = null
 
     init {
         setupView()
+        // Инициализируем настройки
+        try {
+            appSettings = AppSettings.getInstance(context)
+        } catch (e: Exception) {
+            // Если настройки недоступны, используем цвета по умолчанию
+        }
     }
 
     private fun setupView() {
@@ -65,7 +74,7 @@ class CustomCalendarView @JvmOverloads constructor(
         }
     }
 
-    private fun generateCalendar() {
+    fun generateCalendar() {
         // Очищаем предыдущие даты (кроме заголовков)
         for (i in gridLayout.childCount - 1 downTo 7) {
             gridLayout.removeViewAt(i)
@@ -86,8 +95,9 @@ class CustomCalendarView @JvmOverloads constructor(
         val daysInMonth = currentMonth.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         for (day in 1..daysInMonth) {
-            addDateCell(day, currentMonth)
-            currentMonth.add(Calendar.DAY_OF_MONTH, 1)
+            val cellCalendar = calendar.clone() as Calendar
+            cellCalendar.set(Calendar.DAY_OF_MONTH, day)
+            addDateCell(day, cellCalendar)
         }
     }
 
@@ -113,29 +123,50 @@ class CustomCalendarView @JvmOverloads constructor(
             setPadding(16, 16, 16, 16)
             gravity = android.view.Gravity.CENTER
 
-            // Проверяем, является ли день выходным
-            val dayOfWeek = monthCalendar.get(Calendar.DAY_OF_WEEK)
-            val isWeekend = dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY
-
-            if (isWeekend) {
-                setTextColor(Color.RED)
-            } else {
-                setTextColor(Color.BLACK)
-            }
-
             // Проверяем, является ли день сегодняшним
             val today = Calendar.getInstance()
             val isToday = day == today.get(Calendar.DAY_OF_MONTH) &&
                          monthCalendar.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
                          monthCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
 
-            if (isToday) {
-                setBackgroundColor(Color.parseColor("#E8F5E8"))
+            // Проверяем, является ли день выбранным
+            val isSelected = day == selectedDate.get(Calendar.DAY_OF_MONTH) &&
+                           monthCalendar.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH) &&
+                           monthCalendar.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR)
+
+            // Проверяем, является ли день выходным
+            val dayOfWeek = monthCalendar.get(Calendar.DAY_OF_WEEK)
+            val isWeekend = dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY
+
+            // Устанавливаем цвет текста в порядке приоритета (снизу вверх)
+            when {
+                isSelected -> {
+                    val selectedColor = appSettings?.selectedDayColor ?: Color.parseColor("#9C27B0")
+                    setTextColor(selectedColor)
+                    setBackgroundColor(Color.TRANSPARENT)
+                }
+                isToday -> {
+                    val currentColor = appSettings?.currentDayColor ?: Color.parseColor("#00BCD4")
+                    setTextColor(currentColor)
+                    setBackgroundColor(Color.TRANSPARENT)
+                }
+                isWeekend -> {
+                    val weekendColor = appSettings?.weekendColor ?: Color.RED
+                    setTextColor(weekendColor)
+                    setBackgroundColor(Color.TRANSPARENT)
+                }
+                else -> {
+                    setTextColor(Color.BLACK) // Обычный черный - низший приоритет
+                    setBackgroundColor(Color.TRANSPARENT)
+                }
             }
 
             setOnClickListener {
+                // Сохраняем выбранную дату, но НЕ меняем месяц календаря
                 selectedDate = monthCalendar.clone() as Calendar
                 selectedDate.set(Calendar.DAY_OF_MONTH, day)
+
+                // Уведомляем о выборе даты
                 onDateSelectedListener?.invoke(
                     selectedDate.get(Calendar.YEAR),
                     selectedDate.get(Calendar.MONTH),
@@ -157,8 +188,70 @@ class CustomCalendarView @JvmOverloads constructor(
         onDateSelectedListener = listener
     }
 
+    fun setOnMonthYearChangedListener(listener: (Int, Int) -> Unit) {
+        onMonthYearChangedListener = listener
+    }
+
+    fun getCurrentMonth(): Int {
+        return calendar.get(Calendar.MONTH)
+    }
+
+    fun getCurrentYear(): Int {
+        return calendar.get(Calendar.YEAR)
+    }
+
     fun setDate(year: Int, month: Int, day: Int) {
         calendar.set(year, month, day)
         generateCalendar()
+        // Уведомляем об изменении месяца и года
+        onMonthYearChangedListener?.invoke(year, month)
+    }
+
+    fun updateColors() {
+        // Обновляем цвета календаря при изменении настроек
+        generateCalendar()
+    }
+
+    private fun updateDateCellBackground(dateCell: TextView, day: Int, monthCalendar: Calendar) {
+        // Проверяем, является ли день сегодняшним
+        val today = Calendar.getInstance()
+        val isToday = day == today.get(Calendar.DAY_OF_MONTH) &&
+                     monthCalendar.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+                     monthCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+
+                // Проверяем, является ли день выходным
+        val dayOfWeek = monthCalendar.get(Calendar.DAY_OF_WEEK)
+        val isWeekend = dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY
+
+        // Устанавливаем цвет текста в порядке приоритета (снизу вверх)
+        when {
+            isToday -> {
+                dateCell.setTextColor(Color.parseColor("#00BCD4")) // Бирюзовый - высший приоритет
+                dateCell.setBackgroundColor(Color.TRANSPARENT)
+            }
+            isWeekend -> {
+                dateCell.setTextColor(Color.RED) // Красный
+                dateCell.setBackgroundColor(Color.TRANSPARENT)
+            }
+            else -> {
+                dateCell.setTextColor(Color.BLACK) // Обычный черный - низший приоритет
+                dateCell.setBackgroundColor(Color.TRANSPARENT)
+            }
+        }
+    }
+
+    private fun updateAllDateCells() {
+        // Проходим по всем дочерним элементам GridLayout
+        for (i in 7 until gridLayout.childCount) { // Пропускаем заголовки дней недели
+            val child = gridLayout.getChildAt(i)
+            if (child is TextView && child.text.isNotEmpty()) {
+                val day = child.text.toString().toIntOrNull()
+                if (day != null) {
+                    val monthCalendar = calendar.clone() as Calendar
+                    monthCalendar.set(Calendar.DAY_OF_MONTH, day)
+                    updateDateCellBackground(child, day, monthCalendar)
+                }
+            }
+        }
     }
 }

@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">ZmeyGorynych</string>
+    <string name="navigation_drawer_open">Открыть навигационное меню</string>
+    <string name="navigation_drawer_close">Закрыть навигационное меню</string>
+    <string name="nav_home">Главная</string>
+    <string name="nav_work">Работа</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_placeholder">Здесь будут настройки приложения</string>
+    <string name="appearance_settings">Внешний вид</string>
+    <string name="calendar_colors">Цвета календаря</string>
+    <string name="selected_day_color">Выделенный день</string>
+    <string name="current_day_color">Текущий день</string>
+    <string name="weekend_color">Выходные</string>
+    <string name="change_color">Изменить</string>
+    <string name="theme_settings">Тема</string>
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Темная</string>
+    <string name="system_theme">Системная</string>
+    <string name="color_palette">Цветовая палитра</string>
+    <string name="color_wheel">Цветовой круг</string>
+    <string name="adjust_color">Настройка цвета</string>
+    <string name="fine_tune">Точная настройка</string>
+    <string name="hue">Оттенок</string>
+    <string name="saturation">Насыщенность</string>
+    <string name="brightness">Яркость</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">ОК</string>
 </resources>

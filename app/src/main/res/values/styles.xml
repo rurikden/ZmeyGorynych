@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Стиль для NumberPicker в темной теме -->
+    <style name="NumberPickerStyle" parent="Theme.Material3.DayNight">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#CCCCCC</item>
+        <item name="android:colorControlNormal">#4CAF50</item>
+        <item name="android:colorAccent">#4CAF50</item>
+        <item name="android:background">#1A1A1A</item>
+    </style>
+
+    <!-- Стиль для полноэкранного диалога -->
+    <style name="FullScreenDialog" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

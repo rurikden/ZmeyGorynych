@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="color_cell_size">48dp</dimen>
+    <dimen name="color_cell_margin">4dp</dimen>
+    <dimen name="color_cell_corner_radius">8dp</dimen>
+    <dimen name="color_cell_stroke_width">1dp</dimen>
+</resources>
