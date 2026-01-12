@@ -44,6 +44,11 @@ abstract class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationIt
 
         // Настройка обработки кнопки "Назад"
         setupBackPressHandler()
+
+        // Настройка долгого нажатия для вызова меню
+        setupLongPressToOpenMenu()
+
+
     }
 
     private fun setupBackPressHandler() {
@@ -58,6 +63,21 @@ abstract class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationIt
             }
         })
     }
+
+    private fun setupLongPressToOpenMenu() {
+        // Находим основной контейнер и добавляем долгое нажатие
+        val mainContainer = findViewById<android.view.View>(R.id.main)
+        if (mainContainer != null) {
+            mainContainer.setOnLongClickListener {
+                if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.openDrawer(GravityCompat.START)
+                }
+                true
+            }
+        }
+    }
+
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -77,6 +97,12 @@ abstract class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationIt
             R.id.nav_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.nav_personnel -> {
+                if (this !is PersonnelActivity) {
+                    val intent = Intent(this, PersonnelActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
 

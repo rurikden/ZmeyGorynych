@@ -11,6 +11,11 @@
             android:id="@+id/nav_work"
             android:icon="@drawable/ic_work"
             android:title="@string/nav_work" />
+
+        <item
+            android:id="@+id/nav_personnel"
+            android:icon="@drawable/ic_personnel"
+            android:title="@string/nav_personnel" />
     </group>
 
     <item android:title="Дополнительно">

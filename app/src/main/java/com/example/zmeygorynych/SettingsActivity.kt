@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.app.AppCompatDelegate
 
 class SettingsActivity : BaseActivity() {
 
@@ -127,8 +128,12 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun applyTheme(themeMode: AppSettings.ThemeMode) {
-        // Здесь можно добавить логику применения темы
-        // Пока просто сохраняем настройку
-        // В реальном приложении нужно перезапустить активность или применить тему
+        when (themeMode) {
+            AppSettings.ThemeMode.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            AppSettings.ThemeMode.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            AppSettings.ThemeMode.SYSTEM -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
+        // Перезапускаем активность для применения темы
+        recreate()
     }
 }

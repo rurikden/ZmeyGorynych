@@ -27,6 +27,12 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
+        <activity
+            android:name=".PersonnelActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PersonnelListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

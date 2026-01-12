@@ -10,6 +10,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import java.text.SimpleDateFormat
 import java.util.*
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.animation.TranslateAnimation
 
 class CustomCalendarView @JvmOverloads constructor(
     context: Context,
@@ -25,6 +28,33 @@ class CustomCalendarView @JvmOverloads constructor(
     private var selectedDate: Calendar = Calendar.getInstance()
     private var currentSelectedDate: Calendar = Calendar.getInstance()
     private var appSettings: AppSettings? = null
+
+    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        private val SWIPE_THRESHOLD = 100
+        private val SWIPE_VELOCITY_THRESHOLD = 100
+
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            if (e1 == null) return false
+            val diffX = e2.x - e1.x
+            val diffY = e2.y - e1.y
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        goToPreviousMonthWithAnimation()
+                    } else {
+                        goToNextMonthWithAnimation()
+                    }
+                    return true
+                }
+            }
+            return false
+        }
+    })
 
     init {
         setupView()
@@ -162,6 +192,8 @@ class CustomCalendarView @JvmOverloads constructor(
             }
 
             setOnClickListener {
+                // Виброотклик при выборе даты
+                performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
                 // Сохраняем выбранную дату, но НЕ меняем месяц календаря
                 selectedDate = monthCalendar.clone() as Calendar
                 selectedDate.set(Calendar.DAY_OF_MONTH, day)
@@ -253,5 +285,33 @@ class CustomCalendarView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+
+    private fun goToNextMonthWithAnimation() {
+        val oldMonth = calendar.clone() as Calendar
+        calendar.add(Calendar.MONTH, 1)
+        animateMonthChange(true) // true = next
+        onMonthYearChangedListener?.invoke(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
+        generateCalendar()
+    }
+
+    private fun goToPreviousMonthWithAnimation() {
+        val oldMonth = calendar.clone() as Calendar
+        calendar.add(Calendar.MONTH, -1)
+        animateMonthChange(false) // false = previous
+        onMonthYearChangedListener?.invoke(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
+        generateCalendar()
+    }
+
+    private fun animateMonthChange(isNext: Boolean) {
+        val fromX = if (isNext) gridLayout.width.toFloat() else -gridLayout.width.toFloat()
+        val toX = 0f
+        val anim = TranslateAnimation(fromX, toX, 0f, 0f)
+        anim.duration = 250
+        gridLayout.startAnimation(anim)
     }
 }

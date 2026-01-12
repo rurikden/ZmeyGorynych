@@ -24,11 +24,7 @@ class MainActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        // Настройка обработчика кнопки "Открыть меню"
-        val btnOpenMenu = findViewById<Button>(R.id.btnOpenMenu)
-        btnOpenMenu.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
+        // Обработчик кнопки 'Открыть меню' удалён
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

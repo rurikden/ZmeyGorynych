@@ -5,6 +5,7 @@
     <string name="nav_home">Главная</string>
     <string name="nav_work">Работа</string>
     <string name="nav_settings">Настройки</string>
+    <string name="nav_personnel">Персонал</string>
     <string name="settings_title">Настройки</string>
     <string name="settings_placeholder">Здесь будут настройки приложения</string>
     <string name="appearance_settings">Внешний вид</string>
