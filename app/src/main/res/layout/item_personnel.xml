@@ -3,53 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="4dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="10dp">
 
-        <!-- ФИО -->
+        <!-- ФИО по центру -->
         <TextView
             android:id="@+id/tvFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:gravity="center"
             android:text="ФИО"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
-        <!-- Должность -->
-        <TextView
-            android:id="@+id/tvPosition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Должность"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <!-- Предприятие -->
-        <TextView
-            android:id="@+id/tvCompany"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:text="Предприятие"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <!-- Кнопки действий -->
+        <!-- Кнопки действий снизу в ряд -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="end">
+            android:gravity="center">
 
             <Button
                 android:id="@+id/btnEdit"
@@ -57,20 +38,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/button_ok_background"
-                android:padding="8dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="6dp"
                 android:text="Изменить"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_cancel_background"
-                android:padding="8dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="6dp"
                 android:text="Удалить"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 

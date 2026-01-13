@@ -15,8 +15,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
@@ -88,7 +88,9 @@ class PersonnelListActivity : BaseActivity() {
             onDeleteClick = { personnel -> deletePersonnel(personnel) }
         )
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        // Используем StaggeredGridLayoutManager для интеллектуального размещения в 2 колонки
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = staggeredGridLayoutManager
         recyclerView.adapter = adapter
     }
 
