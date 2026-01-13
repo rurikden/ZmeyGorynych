@@ -34,10 +34,16 @@ class PersonnelActivity : BaseActivity() {
             supportActionBar?.title = "Персонал"
 
             // Инициализация ViewModel
-            val database = AppDatabase.getDatabase(this)
-            val repository = PersonnelRepository(database.personnelDao())
-            val factory = PersonnelViewModelFactory(repository)
-            viewModel = ViewModelProvider(this, factory)[PersonnelViewModel::class.java]
+            try {
+                val database = AppDatabase.getDatabase(this)
+                val repository = PersonnelRepository(database.personnelDao())
+                val factory = PersonnelViewModelFactory(repository)
+                viewModel = ViewModelProvider(this, factory)[PersonnelViewModel::class.java]
+            } catch (e: Exception) {
+                Toast.makeText(this, "Ошибка базы данных: ${e.message}", Toast.LENGTH_LONG).show()
+                finish()
+                return
+            }
 
             // Инициализация views
             initializeViews()
