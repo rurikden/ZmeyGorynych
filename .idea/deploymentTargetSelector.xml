@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-01-13T06:06:40.014685900Z">
+        <DropdownSelection timestamp="2026-01-13T06:13:56.886597900Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\rurik\.android\avd\Xiaomi_Mi_Pad_6_API_34.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=74f5a733" />
             </handle>
           </Target>
         </DropdownSelection>
