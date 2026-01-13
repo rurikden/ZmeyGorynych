@@ -88,8 +88,8 @@ class PersonnelListActivity : BaseActivity() {
             onDeleteClick = { personnel -> deletePersonnel(personnel) }
         )
 
-        // Используем StaggeredGridLayoutManager для интеллектуального размещения в 2 колонки
-        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        // Используем StaggeredGridLayoutManager для интеллектуального размещения в 3 колонки
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.layoutManager = staggeredGridLayoutManager
         recyclerView.adapter = adapter
     }

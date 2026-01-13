@@ -27,29 +27,34 @@ class PersonnelActivity : BaseActivity() {
     override fun getLayoutResourceId(): Int = R.layout.activity_personnel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        try {
+            super.onCreate(savedInstanceState)
 
-        // Настройка заголовка
-        supportActionBar?.title = "Персонал"
+            // Настройка заголовка
+            supportActionBar?.title = "Персонал"
 
-        // Инициализация ViewModel
-        val database = AppDatabase.getDatabase(this)
-        val repository = PersonnelRepository(database.personnelDao())
-        val factory = PersonnelViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[PersonnelViewModel::class.java]
+            // Инициализация ViewModel
+            val database = AppDatabase.getDatabase(this)
+            val repository = PersonnelRepository(database.personnelDao())
+            val factory = PersonnelViewModelFactory(repository)
+            viewModel = ViewModelProvider(this, factory)[PersonnelViewModel::class.java]
 
-        // Инициализация views
-        initializeViews()
-        setupClickListeners()
-        setupDoubleTapOnTitle()
-        
-        // Обработка параметров из Intent
-        handleIntentExtras()
+            // Инициализация views
+            initializeViews()
+            setupClickListeners()
+            setupDoubleTapOnTitle()
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+            // Обработка параметров из Intent
+            handleIntentExtras()
+
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Ошибка инициализации: ${e.message}", Toast.LENGTH_LONG).show()
+            finish()
         }
     }
 
@@ -113,20 +118,24 @@ class PersonnelActivity : BaseActivity() {
     }
 
     private fun addPersonnel() {
-        val lastName = etLastName.text.toString().trim()
-        val firstName = etFirstName.text.toString().trim()
-        val middleName = etMiddleName.text.toString().trim()
-        val position = etPosition.text.toString().trim()
-        val company = etCompany.text.toString().trim()
+        try {
+            val lastName = etLastName.text.toString().trim()
+            val firstName = etFirstName.text.toString().trim()
+            val middleName = etMiddleName.text.toString().trim()
+            val position = etPosition.text.toString().trim()
+            val company = etCompany.text.toString().trim()
 
-        if (lastName.isEmpty() || firstName.isEmpty() || position.isEmpty() || company.isEmpty()) {
-            Toast.makeText(this, "Заполните все обязательные поля", Toast.LENGTH_SHORT).show()
-            return
+            if (lastName.isEmpty() || firstName.isEmpty() || position.isEmpty() || company.isEmpty()) {
+                Toast.makeText(this, "Заполните все обязательные поля", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            viewModel.addPersonnel(lastName, firstName, middleName, position, company)
+            Toast.makeText(this, "Работник добавлен", Toast.LENGTH_SHORT).show()
+            clearFields()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Ошибка при добавлении: ${e.message}", Toast.LENGTH_SHORT).show()
         }
-
-        viewModel.addPersonnel(lastName, firstName, middleName, position, company)
-        Toast.makeText(this, "Работник добавлен", Toast.LENGTH_SHORT).show()
-        clearFields()
     }
 
     private fun clearFields() {
