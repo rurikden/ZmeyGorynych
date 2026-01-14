@@ -26,14 +26,14 @@ class PersonnelAdapter(
 
     inner class PersonnelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvFullName: TextView = itemView.findViewById(R.id.tvFullName)
-        private val btnEdit: Button = itemView.findViewById(R.id.btnEdit)
-        private val btnDelete: Button = itemView.findViewById(R.id.btnDelete)
+        private val tvPosition: TextView = itemView.findViewById(R.id.tvPosition)
 
         fun bind(personnel: Personnel) {
             tvFullName.text = formatShortName(personnel)
+            tvPosition.text = personnel.displayPosition
 
-            btnEdit.setOnClickListener { onEditClick(personnel) }
-            btnDelete.setOnClickListener { onDeleteClick(personnel) }
+            // Клик по всей карточке для редактирования
+            itemView.setOnClickListener { onEditClick(personnel) }
         }
     }
 

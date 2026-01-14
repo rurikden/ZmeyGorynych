@@ -59,7 +59,8 @@ class PersonnelViewModel(private val repository: PersonnelRepository) : ViewMode
                     firstName = firstName,
                     middleName = middleName,
                     position = position,
-                    company = company
+                    company = company,
+                    fullPosition = Personnel.expandPosition(position)
                 )
             )
             if (currentQuery.isNotBlank()) {
@@ -74,6 +75,36 @@ class PersonnelViewModel(private val repository: PersonnelRepository) : ViewMode
             if (currentQuery.isNotBlank()) {
                 searchPersonnel(currentQuery)
             }
+        }
+    }
+
+    fun updatePersonnel(
+        personnelId: Long,
+        lastName: String,
+        firstName: String,
+        middleName: String,
+        position: String,
+        company: String
+    ) {
+        viewModelScope.launch {
+            val updatedPersonnel = Personnel(
+                id = personnelId,
+                lastName = lastName,
+                firstName = firstName,
+                middleName = middleName,
+                position = position,
+                company = company,
+                fullPosition = Personnel.expandPosition(position)
+            )
+            repository.updatePersonnel(updatedPersonnel)
+        }
+    }
+
+    fun deletePersonnel(personnelId: Long) {
+        viewModelScope.launch {
+            // Найти сотрудника по ID и удалить
+            val personnelToDelete = personnelList.value.find { it.id == personnelId }
+            personnelToDelete?.let { repository.deletePersonnel(it) }
         }
     }
 }

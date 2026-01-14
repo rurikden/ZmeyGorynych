@@ -2,6 +2,7 @@ package com.example.zmeygorynych
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -21,7 +22,11 @@ class PersonnelActivity : BaseActivity() {
     private lateinit var etMiddleName: TextInputEditText
     private lateinit var etPosition: TextInputEditText
     private lateinit var etCompany: TextInputEditText
+    private lateinit var btnAdd: Button
+    private lateinit var btnDelete: Button
     private var lastClickTime: Long = 0
+    private var isEditMode = false
+    private var editingPersonnelId: Long = -1
 
 
     override fun getLayoutResourceId(): Int = R.layout.activity_personnel
@@ -70,12 +75,15 @@ class PersonnelActivity : BaseActivity() {
         etMiddleName = findViewById(R.id.etMiddleName)
         etPosition = findViewById(R.id.etPosition)
         etCompany = findViewById(R.id.etCompany)
+        btnAdd = findViewById(R.id.btnAdd)
+        btnDelete = findViewById(R.id.btnDelete)
     }
 
     private fun setupClickListeners() {
-        findViewById<Button>(R.id.btnAdd).setOnClickListener { addPersonnel() }
+        btnAdd.setOnClickListener { addOrUpdatePersonnel() }
         findViewById<Button>(R.id.btnClear).setOnClickListener { clearFields() }
         findViewById<Button>(R.id.btnViewList).setOnClickListener { openPersonnelList() }
+        btnDelete.setOnClickListener { deletePersonnel() }
 
         // Обработчик кнопки меню
         findViewById<ImageButton>(R.id.btnMenu).setOnClickListener {
@@ -101,29 +109,35 @@ class PersonnelActivity : BaseActivity() {
     
     private fun handleIntentExtras() {
         // Обработка режима редактирования
-        val editMode = intent.getBooleanExtra("edit_mode", false)
-        if (editMode) {
+        isEditMode = intent.getBooleanExtra("edit_mode", false)
+        if (isEditMode) {
+            editingPersonnelId = intent.getLongExtra("personnel_id", -1)
             val lastName = intent.getStringExtra("last_name") ?: ""
             val firstName = intent.getStringExtra("first_name") ?: ""
             val middleName = intent.getStringExtra("middle_name") ?: ""
             val position = intent.getStringExtra("position") ?: ""
             val company = intent.getStringExtra("company") ?: ""
-            
+
             etLastName.setText(lastName)
             etFirstName.setText(firstName)
             etMiddleName.setText(middleName)
             etPosition.setText(position)
             etCompany.setText(company)
+
+            // Меняем текст кнопки и показываем кнопку удаления
+            btnAdd.text = "Сохранить"
+            btnDelete.visibility = View.VISIBLE
+            supportActionBar?.title = "Редактирование персонала"
         }
-        
+
         // Обработка предложенной должности
         val suggestedPosition = intent.getStringExtra("suggested_position")
-        if (!suggestedPosition.isNullOrBlank()) {
+        if (!suggestedPosition.isNullOrBlank() && !isEditMode) {
             etPosition.setText(suggestedPosition)
         }
     }
 
-    private fun addPersonnel() {
+    private fun addOrUpdatePersonnel() {
         try {
             val lastName = etLastName.text.toString().trim()
             val firstName = etFirstName.text.toString().trim()
@@ -136,11 +150,38 @@ class PersonnelActivity : BaseActivity() {
                 return
             }
 
-            viewModel.addPersonnel(lastName, firstName, middleName, position, company)
-            Toast.makeText(this, "Работник добавлен", Toast.LENGTH_SHORT).show()
-            clearFields()
+            if (isEditMode && editingPersonnelId != -1L) {
+                // Обновление существующего сотрудника
+                viewModel.updatePersonnel(editingPersonnelId, lastName, firstName, middleName, position, company)
+                Toast.makeText(this, "Работник обновлен", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                // Добавление нового сотрудника
+                viewModel.addPersonnel(lastName, firstName, middleName, position, company)
+                Toast.makeText(this, "Работник добавлен", Toast.LENGTH_SHORT).show()
+                clearFields()
+            }
         } catch (e: Exception) {
-            Toast.makeText(this, "Ошибка при добавлении: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Ошибка при сохранении: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun deletePersonnel() {
+        if (isEditMode && editingPersonnelId != -1L) {
+            AlertDialog.Builder(this)
+                .setTitle("Удаление работника")
+                .setMessage("Вы уверены, что хотите удалить этого работника?")
+                .setPositiveButton("Удалить") { _, _ ->
+                    try {
+                        viewModel.deletePersonnel(editingPersonnelId)
+                        Toast.makeText(this, "Работник удален", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "Ошибка при удалении: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .setNegativeButton("Отмена", null)
+                .show()
         }
     }
 

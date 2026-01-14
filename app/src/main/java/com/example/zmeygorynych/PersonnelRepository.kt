@@ -10,6 +10,8 @@ class PersonnelRepository(private val personnelDao: PersonnelDao) {
 
     suspend fun addPersonnel(personnel: Personnel): Long = personnelDao.insertPersonnel(personnel)
 
+    suspend fun updatePersonnel(personnel: Personnel) = personnelDao.updatePersonnel(personnel)
+
     suspend fun deletePersonnel(personnel: Personnel) = personnelDao.deletePersonnel(personnel)
 
     suspend fun getMachinists(): List<Personnel> = personnelDao.getMachinists()
