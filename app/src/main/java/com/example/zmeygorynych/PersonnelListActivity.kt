@@ -63,6 +63,9 @@ class PersonnelListActivity : BaseActivity() {
         val factory = PersonnelViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[PersonnelViewModel::class.java]
 
+        // Инициализация кэша кодов должностей
+        initializePositionCodesCache(database)
+
         // Инициализация views
         initializeViews()
         setupRecyclerView()
@@ -106,10 +109,10 @@ class PersonnelListActivity : BaseActivity() {
     }
 
     private fun setupClickListeners() {
-        findViewById<Button>(R.id.btnBack).setOnClickListener { finish() }
         findViewById<Button>(R.id.btnCreate).setOnClickListener { createNewPersonnel() }
         findViewById<Button>(R.id.btnImport).setOnClickListener { selectImportFile() }
         findViewById<Button>(R.id.btnExport).setOnClickListener { selectExportFile() }
+        findViewById<Button>(R.id.btnPositionCodes).setOnClickListener { openPositionCodes() }
     }
 
     private fun observeData() {
@@ -123,6 +126,47 @@ class PersonnelListActivity : BaseActivity() {
     private fun createNewPersonnel() {
         val intent = Intent(this, PersonnelActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun openPositionCodes() {
+        val intent = Intent(this, PositionCodeActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun initializePositionCodesCache(database: AppDatabase) {
+        lifecycleScope.launch {
+            try {
+                val positionCodes = database.positionCodeDao().getAllPositionCodes()
+                Personnel.setPositionCodesCache(positionCodes)
+            } catch (e: Exception) {
+                // Обработка ошибок
+            }
+        }
+    }
+
+    private suspend fun getAllPositionCodesSync(): List<PositionCode> {
+        val database = AppDatabase.getDatabase(this)
+        return try {
+            database.positionCodeDao().getAllPositionCodes()
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun addPositionCodeIfNotExists(positionCode: PositionCode) {
+        lifecycleScope.launch {
+            try {
+                val existingCode = getAllPositionCodesSync().find { it.shortCode == positionCode.shortCode }
+                if (existingCode == null) {
+                    val database = AppDatabase.getDatabase(this@PersonnelListActivity)
+                    database.positionCodeDao().insertPositionCode(positionCode)
+                    // Обновляем кэш
+                    initializePositionCodesCache(database)
+                }
+            } catch (e: Exception) {
+                // Обработка ошибок
+            }
+        }
     }
 
     private fun editPersonnel(personnel: Personnel) {
@@ -172,38 +216,64 @@ class PersonnelListActivity : BaseActivity() {
             contentResolver.openInputStream(uri)?.use { inputStream ->
                 val reader = BufferedReader(InputStreamReader(inputStream))
                 var line: String?
-                var isFirstLine = true
-                var importedCount = 0
+                var currentSection = ""
+                var personnelImported = 0
+                var codesImported = 0
 
                 while (reader.readLine().also { line = it } != null) {
-                    if (isFirstLine) {
-                        isFirstLine = false
-                        continue
-                    }
-
                     line?.let { csvLine ->
-                        val parts = csvLine.split(",")
-                        if (parts.size >= 5) {
-                            val personnel = Personnel(
-                                lastName = parts[0].trim().removeSurrounding("\""),
-                                firstName = parts[1].trim().removeSurrounding("\""),
-                                middleName = parts[2].trim().removeSurrounding("\""),
-                                position = parts[3].trim().removeSurrounding("\""),
-                                company = parts[4].trim().removeSurrounding("\"")
-                            )
-                            viewModel.addPersonnel(
-                                personnel.lastName,
-                                personnel.firstName,
-                                personnel.middleName,
-                                personnel.position,
-                                personnel.company
-                            )
-                            importedCount++
+                        val trimmedLine = csvLine.trim()
+
+                        // Проверяем на разделитель секций
+                        if (trimmedLine.startsWith("#")) {
+                            currentSection = trimmedLine
+                            // Пропускаем заголовок секции
+                            reader.readLine() // Пропускаем строку с заголовками
+                            return@let // Вместо continue используем return из lambda
+                        }
+
+                        // Пропускаем пустые строки
+                        if (trimmedLine.isEmpty()) return@let
+
+                        when (currentSection) {
+                            "# Персонал" -> {
+                                val parts = csvLine.split(",")
+                                if (parts.size >= 5) {
+                                    val personnel = Personnel(
+                                        lastName = parts[0].trim().removeSurrounding("\""),
+                                        firstName = parts[1].trim().removeSurrounding("\""),
+                                        middleName = parts[2].trim().removeSurrounding("\""),
+                                        position = parts[3].trim().removeSurrounding("\""),
+                                        company = parts[4].trim().removeSurrounding("\"")
+                                    )
+                                    viewModel.addPersonnel(
+                                        personnel.lastName,
+                                        personnel.firstName,
+                                        personnel.middleName,
+                                        personnel.position,
+                                        personnel.company
+                                    )
+                                    personnelImported++
+                                }
+                            }
+                            "# Коды должностей" -> {
+                                val parts = csvLine.split(",")
+                                if (parts.size >= 3) {
+                                    val positionCode = PositionCode(
+                                        shortCode = parts[0].trim().removeSurrounding("\""),
+                                        fullTitle = parts[1].trim().removeSurrounding("\""),
+                                        category = parts[2].trim().removeSurrounding("\"")
+                                    )
+                                    addPositionCodeIfNotExists(positionCode)
+                                    codesImported++
+                                }
+                            }
                         }
                     }
                 }
 
-                Toast.makeText(this, "Импортировано $importedCount записей", Toast.LENGTH_SHORT).show()
+                val message = "Импортировано: $personnelImported персонала, $codesImported кодов"
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
             }
         } catch (e: Exception) {
             Toast.makeText(this, "Ошибка импорта: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -211,22 +281,38 @@ class PersonnelListActivity : BaseActivity() {
     }
 
     private fun exportToCsv(uri: Uri) {
-        try {
-            contentResolver.openOutputStream(uri)?.use { outputStream ->
-                val writer = OutputStreamWriter(outputStream)
+        lifecycleScope.launch {
+            try {
+                contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    val writer = OutputStreamWriter(outputStream)
 
-                writer.write("Фамилия,Имя,Отчество,Должность,Предприятие\n")
+                    // Экспорт персонала
+                    writer.write("# Персонал\n")
+                    writer.write("Фамилия,Имя,Отчество,Должность,Предприятие\n")
 
-                viewModel.personnelList.value.forEach { personnel ->
-                    val line = "\"${personnel.lastName}\",\"${personnel.firstName}\",\"${personnel.middleName}\",\"${personnel.position}\",\"${personnel.company}\"\n"
-                    writer.write(line)
+                    viewModel.personnelList.value.forEach { personnel ->
+                        val line = "\"${personnel.lastName}\",\"${personnel.firstName}\",\"${personnel.middleName}\",\"${personnel.position}\",\"${personnel.company}\"\n"
+                        writer.write(line)
+                    }
+
+                    writer.write("\n")
+
+                    // Экспорт кодов должностей
+                    writer.write("# Коды должностей\n")
+                    writer.write("Сокращение,Полное_название,Категория\n")
+
+                    val positionCodes = getAllPositionCodesSync()
+                    positionCodes.forEach { code ->
+                        val line = "\"${code.shortCode}\",\"${code.fullTitle}\",\"${code.category}\"\n"
+                        writer.write(line)
+                    }
+
+                    writer.close()
+                    Toast.makeText(this@PersonnelListActivity, "Экспорт завершен", Toast.LENGTH_SHORT).show()
                 }
-
-                writer.close()
-                Toast.makeText(this, "Экспорт завершен", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@PersonnelListActivity, "Ошибка экспорта: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-        } catch (e: Exception) {
-            Toast.makeText(this, "Ошибка экспорта: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }

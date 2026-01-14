@@ -34,19 +34,6 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <TextView
-                    android:id="@+id/tvPersonnelListTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/clickable_title_background"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="Список персонала"
-                    android:textColor="@color/black"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
                 <!-- Поиск -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilSearch"
@@ -109,25 +96,24 @@
                         android:id="@+id/btnExport"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
                         android:background="@drawable/button_ok_background"
                         android:padding="12dp"
                         android:text="Сохранить"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
-                </LinearLayout>
+                    <Button
+                        android:id="@+id/btnPositionCodes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_ok_background"
+                        android:padding="12dp"
+                        android:text="Сокращения"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
-                <!-- Кнопка возврата -->
-                <Button
-                    android:id="@+id/btnBack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/button_cancel_background"
-                    android:padding="12dp"
-                    android:text="Назад"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                </LinearLayout>
 
             </LinearLayout>
 

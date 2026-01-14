@@ -22,11 +22,37 @@ data class Personnel(
         get() = if (fullPosition.isNotEmpty()) fullPosition else expandPosition(position, company)
 
     companion object {
+        // Кэш для кодов должностей (загружается из базы данных)
+        private var positionCodesCache: List<PositionCode> = emptyList()
+
+        // Метод для установки кэша кодов должностей
+        fun setPositionCodesCache(codes: List<PositionCode>) {
+            positionCodesCache = codes
+        }
+
         fun expandPosition(shortPosition: String, company: String): String {
+            val positionTrimmed = shortPosition.trim()
+
+            // Сначала пробуем найти в кэше кодов должностей
+            val cachedCode = positionCodesCache.find { it.shortCode == positionTrimmed }
+            if (cachedCode != null) {
+                val number = extractNumberFromCompany(company)
+                return if (number.isNotEmpty()) {
+                    "${cachedCode.fullTitle} ${cachedCode.category} $number"
+                } else {
+                    "${cachedCode.fullTitle} (${cachedCode.category})"
+                }
+            }
+
+            // Fallback: старый алгоритм
+            return expandPositionLegacy(shortPosition, company)
+        }
+
+        private fun expandPositionLegacy(shortPosition: String, company: String): String {
             val positionTrimmed = shortPosition.trim()
             val companyTrimmed = company.trim()
 
-            // Извлекаем номер из поля company (например, "ПМСГ 110" -> "110")
+            // Извлекаем номер из поля company
             val number = extractNumberFromCompany(companyTrimmed)
 
             return when {
