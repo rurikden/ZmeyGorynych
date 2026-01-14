@@ -82,7 +82,6 @@ class PersonnelActivity : BaseActivity() {
     private fun setupClickListeners() {
         btnAdd.setOnClickListener { addOrUpdatePersonnel() }
         findViewById<Button>(R.id.btnClear).setOnClickListener { clearFields() }
-        findViewById<Button>(R.id.btnViewList).setOnClickListener { openPersonnelList() }
         btnDelete.setOnClickListener { deletePersonnel() }
 
         // Обработчик кнопки меню
@@ -191,11 +190,5 @@ class PersonnelActivity : BaseActivity() {
         etMiddleName.text?.clear()
         etPosition.text?.clear()
         etCompany.text?.clear()
-    }
-
-
-    private fun openPersonnelList() {
-        val intent = Intent(this, PersonnelListActivity::class.java)
-        startActivity(intent)
     }
 }
