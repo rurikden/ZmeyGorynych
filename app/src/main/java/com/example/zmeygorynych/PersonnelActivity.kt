@@ -53,7 +53,6 @@ class PersonnelActivity : BaseActivity() {
             // Инициализация views
             initializeViews()
             setupClickListeners()
-            setupDoubleTapOnTitle()
 
             // Обработка параметров из Intent
             handleIntentExtras()
@@ -83,29 +82,8 @@ class PersonnelActivity : BaseActivity() {
         btnAdd.setOnClickListener { addOrUpdatePersonnel() }
         findViewById<Button>(R.id.btnClear).setOnClickListener { clearFields() }
         btnDelete.setOnClickListener { deletePersonnel() }
-
-        // Обработчик кнопки меню
-        findViewById<ImageButton>(R.id.btnMenu).setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
     }
 
-    private fun setupDoubleTapOnTitle() {
-        val tvTitle = findViewById<TextView>(R.id.tvPersonnelTitle)
-        tvTitle.setOnTouchListener { _, event ->
-            if (event.action == android.view.MotionEvent.ACTION_DOWN) {
-                if (System.currentTimeMillis() - lastClickTime < 300) {
-                    // Двойное нажатие - открываем меню
-                    drawerLayout.openDrawer(GravityCompat.START)
-                    lastClickTime = 0
-                    return@setOnTouchListener true
-                }
-                lastClickTime = System.currentTimeMillis()
-            }
-            false
-        }
-    }
-    
     private fun handleIntentExtras() {
         // Обработка режима редактирования
         isEditMode = intent.getBooleanExtra("edit_mode", false)

@@ -9,11 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import kotlinx.coroutines.launch
 
-class PositionCodeActivity : BaseActivity() {
-
-    override fun getLayoutResourceId(): Int = R.layout.activity_position_codes
+class PositionCodeActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PositionCodeAdapter
@@ -32,6 +31,11 @@ class PositionCodeActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_position_codes)
+
+        // Настройка ActionBar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Коды должностей"
 
         initializeViews()
         setupRecyclerView()
@@ -40,6 +44,16 @@ class PositionCodeActivity : BaseActivity() {
 
         // Инициализируем дефолтные значения при первом запуске
         viewModel.initializeDefaults()
+    }
+
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initializeViews() {
@@ -57,17 +71,15 @@ class PositionCodeActivity : BaseActivity() {
             onEditClick = { positionCode -> showEditDialog(positionCode) },
             onDeleteClick = { positionCode -> showDeleteDialog(positionCode) }
         )
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        // Используем StaggeredGridLayoutManager для интеллектуального размещения в 3 колонки
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = staggeredGridLayoutManager
         recyclerView.adapter = adapter
     }
 
     private fun setupClickListeners() {
         btnAdd.setOnClickListener { addPositionCode() }
         btnClear.setOnClickListener { clearFields() }
-
-        findViewById<ImageButton>(R.id.btnMenu).setOnClickListener {
-            drawerLayout.openDrawer(androidx.core.view.GravityCompat.START)
-        }
     }
 
     private fun observeData() {
