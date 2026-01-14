@@ -19,46 +19,70 @@ data class Personnel(
 
     // Вычисляемое свойство для отображения полной должности
     val displayPosition: String
-        get() = if (fullPosition.isNotEmpty()) fullPosition else expandPosition(position)
+        get() = if (fullPosition.isNotEmpty()) fullPosition else expandPosition(position, company)
 
     companion object {
-        fun expandPosition(shortPosition: String): String {
-            val trimmed = shortPosition.trim()
+        fun expandPosition(shortPosition: String, company: String): String {
+            val positionTrimmed = shortPosition.trim()
+            val companyTrimmed = company.trim()
+
+            // Извлекаем номер из поля company (например, "ПМСГ 110" -> "110")
+            val number = extractNumberFromCompany(companyTrimmed)
 
             return when {
                 // ПМС (Путевая машинная станция)
-                trimmed.matches(Regex("ПМС \\d+")) -> {
-                    "Начальник $trimmed"
+                positionTrimmed == "ПМС" && number.isNotEmpty() -> {
+                    "Начальник ПМС $number"
                 }
-                trimmed.matches(Regex("ПМСЗ \\d+")) -> {
-                    val number = trimmed.substringAfter("ПМСЗ ")
+                positionTrimmed == "ПМСЗ" && number.isNotEmpty() -> {
                     "Заместитель начальника ПМС $number"
                 }
-                trimmed.matches(Regex("ПМСГ \\d+")) -> {
-                    val number = trimmed.substringAfter("ПМСГ ")
+                positionTrimmed == "ПМСГ" && number.isNotEmpty() -> {
                     "Главный инженер ПМС $number"
                 }
-                trimmed.matches(Regex("ПД ПМС \\d+")) -> {
-                    val number = trimmed.substringAfter("ПД ПМС ")
+                positionTrimmed == "ПД" && companyTrimmed.contains("ПМС") && number.isNotEmpty() -> {
                     "Дорожный мастер ПМС $number"
                 }
 
                 // ПЧ (Путевая часть)
-                trimmed.matches(Regex("ПЧ \\d+")) -> {
-                    "Начальник $trimmed"
+                positionTrimmed == "ПЧ" && number.isNotEmpty() -> {
+                    "Начальник ПЧ $number"
                 }
-                trimmed.matches(Regex("ПЧЗ \\d+")) -> {
-                    val number = trimmed.substringAfter("ПЧЗ ")
+                positionTrimmed == "ПЧЗ" && number.isNotEmpty() -> {
                     "Заместитель начальника ПЧ $number"
                 }
-                trimmed.matches(Regex("ПЧГ \\d+")) -> {
-                    val number = trimmed.substringAfter("ПЧГ ")
+                positionTrimmed == "ПЧГ" && number.isNotEmpty() -> {
                     "Главный инженер ПЧ $number"
                 }
 
-                // Если не распознано - возвращаем как есть
-                else -> trimmed
+                // Если не распознано - возвращаем сокращение + номер
+                number.isNotEmpty() -> "$positionTrimmed $number"
+                else -> positionTrimmed
             }
+        }
+
+        private fun extractNumberFromCompany(company: String): String {
+            // Ищем паттерны типа "ПМСГ 110", "ПЧ 33", "ПМС 45" и т.д.
+            val patterns = listOf(
+                Regex("ПМСГ (\\d+)"),
+                Regex("ПМСЗ (\\d+)"),
+                Regex("ПМС (\\d+)"),
+                Regex("ПЧГ (\\d+)"),
+                Regex("ПЧЗ (\\d+)"),
+                Regex("ПЧ (\\d+)"),
+                Regex("ПД ПМС (\\d+)")
+            )
+
+            for (pattern in patterns) {
+                val match = pattern.find(company)
+                if (match != null) {
+                    return match.groupValues[1]
+                }
+            }
+
+            // Если не нашли паттерн, пробуем найти просто число в конце строки
+            val numberMatch = Regex("(\\d+)$").find(company)
+            return numberMatch?.groupValues?.get(1) ?: ""
         }
     }
 }

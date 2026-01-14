@@ -60,7 +60,7 @@ class PersonnelViewModel(private val repository: PersonnelRepository) : ViewMode
                     middleName = middleName,
                     position = position,
                     company = company,
-                    fullPosition = Personnel.expandPosition(position)
+                    fullPosition = Personnel.expandPosition(position, company)
                 )
             )
             if (currentQuery.isNotBlank()) {
@@ -94,7 +94,7 @@ class PersonnelViewModel(private val repository: PersonnelRepository) : ViewMode
                 middleName = middleName,
                 position = position,
                 company = company,
-                fullPosition = Personnel.expandPosition(position)
+                fullPosition = Personnel.expandPosition(position, company)
             )
             repository.updatePersonnel(updatedPersonnel)
         }
