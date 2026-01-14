@@ -62,27 +62,20 @@ data class Personnel(
         }
 
         private fun extractNumberFromCompany(company: String): String {
-            // Ищем паттерны типа "ПМСГ 110", "ПЧ 33", "ПМС 45" и т.д.
-            val patterns = listOf(
-                Regex("ПМСГ (\\d+)"),
-                Regex("ПМСЗ (\\d+)"),
-                Regex("ПМС (\\d+)"),
-                Regex("ПЧГ (\\d+)"),
-                Regex("ПЧЗ (\\d+)"),
-                Regex("ПЧ (\\d+)"),
-                Regex("ПД ПМС (\\d+)")
-            )
+            // Более гибкий подход: ищем число после ключевых слов
+            val companyUpper = company.uppercase()
 
-            for (pattern in patterns) {
-                val match = pattern.find(company)
-                if (match != null) {
-                    return match.groupValues[1]
-                }
+            // Ищем паттерны с числами после ПМС или ПЧ
+            val pmcPattern = Regex("(?:ПМС|ПЧ).*?(\\d+)", RegexOption.IGNORE_CASE)
+            val match = pmcPattern.find(companyUpper)
+
+            return if (match != null) {
+                match.groupValues[1]
+            } else {
+                // Fallback: любое число в конце строки
+                val numberMatch = Regex("(\\d+)$").find(company)
+                numberMatch?.groupValues?.get(1) ?: ""
             }
-
-            // Если не нашли паттерн, пробуем найти просто число в конце строки
-            val numberMatch = Regex("(\\d+)$").find(company)
-            return numberMatch?.groupValues?.get(1) ?: ""
         }
     }
 }
