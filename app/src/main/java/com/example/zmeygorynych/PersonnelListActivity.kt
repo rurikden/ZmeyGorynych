@@ -107,6 +107,7 @@ class PersonnelListActivity : BaseActivity() {
 
     private fun setupClickListeners() {
         findViewById<Button>(R.id.btnBack).setOnClickListener { finish() }
+        findViewById<Button>(R.id.btnCreate).setOnClickListener { createNewPersonnel() }
         findViewById<Button>(R.id.btnImport).setOnClickListener { selectImportFile() }
         findViewById<Button>(R.id.btnExport).setOnClickListener { selectExportFile() }
     }
@@ -117,6 +118,11 @@ class PersonnelListActivity : BaseActivity() {
                 adapter.submitList(personnelList)
             }
         }
+    }
+
+    private fun createNewPersonnel() {
+        val intent = Intent(this, PersonnelActivity::class.java)
+        startActivity(intent)
     }
 
     private fun editPersonnel(personnel: Personnel) {

@@ -99,8 +99,8 @@ abstract class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationIt
                 startActivity(intent)
             }
             R.id.nav_personnel -> {
-                if (this !is PersonnelActivity) {
-                    val intent = Intent(this, PersonnelActivity::class.java)
+                if (this !is PersonnelListActivity) {
+                    val intent = Intent(this, PersonnelListActivity::class.java)
                     startActivity(intent)
                 }
             }

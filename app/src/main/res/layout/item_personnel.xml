@@ -16,24 +16,24 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- ФИО по центру -->
+        <!-- ФИО по левому краю -->
         <TextView
             android:id="@+id/tvFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:gravity="center"
+            android:gravity="start"
             android:text="ФИО"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold" />
 
-        <!-- Полная должность -->
+        <!-- Полная должность по левому краю -->
         <TextView
             android:id="@+id/tvPosition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="start"
             android:text="Полная должность"
             android:textColor="@color/black"
             android:textSize="13sp" />

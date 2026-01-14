@@ -75,13 +75,24 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent" />
 
-                <!-- Кнопки импорта/экспорта CSV -->
+                <!-- Кнопки действий -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:orientation="horizontal"
                     android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnCreate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/button_ok_background"
+                        android:padding="12dp"
+                        android:text="Создать"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
                     <Button
                         android:id="@+id/btnImport"
@@ -98,7 +109,6 @@
                         android:id="@+id/btnExport"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:background="@drawable/button_ok_background"
                         android:padding="12dp"
                         android:text="Сохранить"
