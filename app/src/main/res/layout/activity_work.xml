@@ -28,7 +28,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -46,7 +45,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/cardTimeParams"
+                    app:layout_constraintBottom_toTopOf="@+id/cardWorkDayInfo"
                     app:layout_constraintVertical_weight="1">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,676 +82,72 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Карточка выбора времени -->
-
-                <!-- Тестовая надпись под карточкой выбора времени -->
+                <!-- Карточка информации о рабочем дне -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardTimeParams"
+                    android:id="@+id/cardWorkDayInfo"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="6dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardCalendar"
-                    app:layout_constraintBottom_toTopOf="@+id/cardWorkParams"
-                    app:layout_constraintVertical_weight="1">
+                    app:layout_constraintBottom_toTopOf="@+id/btnWorkDay">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:padding="16dp">
 
-                        <!-- Вертикальная направляющая для выравнивания времени -->
-                        <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guidelineTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.35" />
-
-                        <!-- Заголовок -->
                         <TextView
-                            android:id="@+id/tvTimeTitle"
+                            android:id="@+id/tvWorkDayInfoTitle"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:text="Время"
+                            android:layout_height="wrap_content"
+                            android:text="Информация о рабочем дне"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toTopOf="@+id/tvWindowLabel1"
-                            app:layout_constraintVertical_weight="0.05" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <!-- Окно 1: с -->
                         <TextView
-                            android:id="@+id/tvWindowLabel1"
+                            android:id="@+id/tvWorkDayInfo"
                             android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="12dp"
-                            android:text="Окно с"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvTimeTitle"
-                            app:layout_constraintBottom_toTopOf="@+id/tvWindowLabel2"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvWindowFrom1"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvWindowLabel1"
-                            app:layout_constraintBottom_toBottomOf="@id/tvWindowLabel1" />
-
-                        <!-- Окно 1: до -->
-                        <TextView
-                            android:id="@+id/tvWindowLabel2"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Окно до"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvWindowLabel1"
-                            app:layout_constraintBottom_toTopOf="@+id/tvWindowLabel3"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvWindowTo1"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvWindowLabel2"
-                            app:layout_constraintBottom_toBottomOf="@id/tvWindowLabel2" />
-
-                        <TextView
-                            android:id="@+id/tvWindowHours1"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Нет данных за выбранную дату"
                             android:textColor="@color/black"
                             android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="@id/tvWindowTo1"
-                            app:layout_constraintStart_toEndOf="@id/tvWindowTo1"
-                            app:layout_constraintTop_toTopOf="@id/tvWindowTo1" />
-
-                        <!-- Окно 2: с -->
-                        <TextView
-                            android:id="@+id/tvWindowLabel3"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Окно с"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvWindowLabel2"
-                            app:layout_constraintBottom_toTopOf="@+id/tvWindowLabel4"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvWindowFrom2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvWindowLabel3"
-                            app:layout_constraintBottom_toBottomOf="@id/tvWindowLabel3" />
-
-                        <!-- Окно 2: до -->
-                        <TextView
-                            android:id="@+id/tvWindowLabel4"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Окно до"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvWindowLabel3"
-                            app:layout_constraintBottom_toTopOf="@+id/tvSkdLabel1"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvWindowTo2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvWindowLabel4"
-                            app:layout_constraintBottom_toBottomOf="@id/tvWindowLabel4" />
-
-                        <TextView
-                            android:id="@+id/tvWindowHours2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="@id/tvWindowTo2"
-                            app:layout_constraintStart_toEndOf="@id/tvWindowTo2"
-                            app:layout_constraintTop_toTopOf="@id/tvWindowTo2" />
-
-                        <!-- СКД 1: с -->
-                        <TextView
-                            android:id="@+id/tvSkdLabel1"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="12dp"
-                            android:text="СКД с"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvWindowLabel4"
-                            app:layout_constraintBottom_toTopOf="@+id/tvSkdLabel2"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvSkdFrom1"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvSkdLabel1"
-                            app:layout_constraintBottom_toBottomOf="@id/tvSkdLabel1" />
-
-                        <!-- СКД 1: до -->
-                        <TextView
-                            android:id="@+id/tvSkdLabel2"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="СКД до"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvSkdLabel1"
-                            app:layout_constraintBottom_toTopOf="@+id/tvSkdLabel3"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvSkdTo1"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvSkdLabel2"
-                            app:layout_constraintBottom_toBottomOf="@id/tvSkdLabel2" />
-
-                        <TextView
-                            android:id="@+id/tvSkdHours1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="@id/tvSkdTo1"
-                            app:layout_constraintStart_toEndOf="@id/tvSkdTo1"
-                            app:layout_constraintTop_toTopOf="@id/tvSkdTo1" />
-
-                        <!-- СКД 2: с -->
-                        <TextView
-                            android:id="@+id/tvSkdLabel3"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="СКД с"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvSkdLabel2"
-                            app:layout_constraintBottom_toTopOf="@+id/tvSkdLabel4"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvSkdFrom2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvSkdLabel3"
-                            app:layout_constraintBottom_toBottomOf="@id/tvSkdLabel3" />
-
-                        <!-- СКД 2: до -->
-                        <TextView
-                            android:id="@+id/tvSkdLabel4"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="СКД до"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvSkdLabel3"
-                            app:layout_constraintBottom_toTopOf="@+id/tvZubovLabel1"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvSkdTo2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvSkdLabel4"
-                            app:layout_constraintBottom_toBottomOf="@id/tvSkdLabel4" />
-
-                        <TextView
-                            android:id="@+id/tvSkdHours2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="@id/tvSkdTo2"
-                            app:layout_constraintStart_toEndOf="@id/tvSkdTo2"
-                            app:layout_constraintTop_toTopOf="@id/tvSkdTo2" />
-
-                        <!-- Зубов 1: с -->
-                        <TextView
-                            android:id="@+id/tvZubovLabel1"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="12dp"
-                            android:text="Зубов с"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvSkdLabel4"
-                            app:layout_constraintBottom_toTopOf="@+id/tvZubovLabel2"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvZubovFrom1"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvZubovLabel1"
-                            app:layout_constraintBottom_toBottomOf="@id/tvZubovLabel1" />
-
-                        <!-- Зубов 1: до -->
-                        <TextView
-                            android:id="@+id/tvZubovLabel2"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Зубов до"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvZubovLabel1"
-                            app:layout_constraintBottom_toTopOf="@+id/tvZubovLabel3"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvZubovTo1"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvZubovLabel2"
-                            app:layout_constraintBottom_toBottomOf="@id/tvZubovLabel2" />
-
-                        <TextView
-                            android:id="@+id/tvZubovHours1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="@id/tvZubovTo1"
-                            app:layout_constraintStart_toEndOf="@id/tvZubovTo1"
-                            app:layout_constraintTop_toTopOf="@id/tvZubovTo1" />
-
-                        <!-- Зубов 2: с -->
-                        <TextView
-                            android:id="@+id/tvZubovLabel3"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Зубов с"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvZubovLabel2"
-                            app:layout_constraintBottom_toTopOf="@+id/tvZubovLabel4"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvZubovFrom2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvZubovLabel3"
-                            app:layout_constraintBottom_toBottomOf="@id/tvZubovLabel3" />
-
-                        <!-- Зубов 2: до -->
-                        <TextView
-                            android:id="@+id/tvZubovLabel4"
-                            android:layout_width="0dp"
-            android:layout_height="0dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Зубов до"
-                            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:gravity="center_vertical"
-                            app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tvZubovLabel3"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintVertical_weight="0.05" />
-
-                        <TextView
-                            android:id="@+id/tvZubovTo2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/date_background"
-                            android:gravity="center"
-                            android:padding="6dp"
-                            android:text="--:--"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                            app:layout_constraintTop_toTopOf="@id/tvZubovLabel4"
-                            app:layout_constraintBottom_toBottomOf="@id/tvZubovLabel4" />
-
-                        <TextView
-                            android:id="@+id/tvZubovHours2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="@id/tvZubovTo2"
-                            app:layout_constraintStart_toEndOf="@id/tvZubovTo2"
-                            app:layout_constraintTop_toTopOf="@id/tvZubovTo2" />
+                            app:layout_constraintTop_toBottomOf="@+id/tvWorkDayInfoTitle" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Карточка параметров работы -->
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardWorkParams"
+                <!-- Кнопка Рабочий день -->
+                <Button
+                    android:id="@+id/btnWorkDay"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="6dp"
+                    android:background="@drawable/button_ok_background"
+                    android:text="Рабочий день"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cardTimeParams"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintVertical_weight="1">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="16dp">
-
-                        <!-- Зубов -->
-                        <TextView
-                            android:id="@+id/tvZubov"
-                            android:layout_width="110dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="16dp"
-                            android:text="Зубов"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toTopOf="@+id/tvSkd"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinnerZubov"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintStart_toEndOf="@+id/tvZubov"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tvZubov"
-                            app:layout_constraintBottom_toBottomOf="@id/tvZubov"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <!-- СКД -->
-                        <TextView
-                            android:id="@+id/tvSkd"
-                            android:layout_width="110dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="16dp"
-                            android:text="СКД"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/spinnerZubov"
-                            app:layout_constraintBottom_toTopOf="@+id/tvMachinist"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinnerSkd"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintStart_toEndOf="@+id/tvSkd"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvZubov"
-                            app:layout_constraintBottom_toBottomOf="@id/tvSkd"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <!-- Машинист -->
-                        <TextView
-                            android:id="@+id/tvMachinist"
-                            android:layout_width="110dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="16dp"
-                            android:text="Машинист"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/spinnerSkd"
-                            app:layout_constraintBottom_toTopOf="@+id/tvMachinist2"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinnerMachinist"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintStart_toEndOf="@+id/tvMachinist"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tvMachinist"
-                            app:layout_constraintBottom_toBottomOf="@id/tvMachinist"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <!-- Машинист (второй) -->
-                        <TextView
-                            android:id="@+id/tvMachinist2"
-                            android:layout_width="110dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="16dp"
-                            android:text="Машинист"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/spinnerMachinist"
-                            app:layout_constraintBottom_toTopOf="@+id/tvManager"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinnerMachinist2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintStart_toEndOf="@+id/tvMachinist2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tvMachinist2"
-                            app:layout_constraintBottom_toBottomOf="@id/tvMachinist2"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <!-- Руководитель -->
-                        <TextView
-                            android:id="@+id/tvManager"
-                            android:layout_width="110dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="16dp"
-                            android:text="Руководитель"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/spinnerMachinist2"
-                            app:layout_constraintBottom_toTopOf="@+id/tvPeregon1"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinnerManager"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintStart_toEndOf="@+id/tvManager"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tvManager"
-                            app:layout_constraintBottom_toBottomOf="@id/tvManager"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <!-- Перегон 1 -->
-                        <TextView
-                            android:id="@+id/tvPeregon1"
-                            android:layout_width="110dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="16dp"
-                            android:text="Перегон"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/spinnerManager"
-                            app:layout_constraintBottom_toTopOf="@+id/tvPeregon2"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinnerPeregon1"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintStart_toEndOf="@+id/tvPeregon1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tvPeregon1"
-                            app:layout_constraintBottom_toBottomOf="@id/tvPeregon1"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <!-- Перегон 2 -->
-                        <TextView
-                            android:id="@+id/tvPeregon2"
-                            android:layout_width="110dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="16dp"
-                            android:text="Перегон"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/spinnerPeregon1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintVertical_weight="1" />
-
-                        <Spinner
-                            android:id="@+id/spinnerPeregon2"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintStart_toEndOf="@+id/tvPeregon2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tvPeregon2"
-                            app:layout_constraintBottom_toBottomOf="@id/tvPeregon2"
-                            app:layout_constraintVertical_weight="1" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                    app:layout_constraintTop_toBottomOf="@+id/cardWorkDayInfo"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

@@ -1,18 +1,17 @@
 package com.example.zmeygorynych
 
 import android.content.Intent
-import android.app.TimePickerDialog
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.*
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -21,49 +20,13 @@ class WorkActivity : BaseActivity() {
 
     private lateinit var customCalendarView: CustomCalendarView
     private lateinit var tvSelectedDate: TextView
-    private lateinit var spinnerZubov: Spinner
-    private lateinit var spinnerSkd: Spinner
-    private lateinit var spinnerMachinist: Spinner
-    private lateinit var spinnerMachinist2: Spinner
-    private lateinit var spinnerManager: Spinner
-    private lateinit var spinnerPeregon1: Spinner
-    private lateinit var spinnerPeregon2: Spinner
-    // Поля выбора времени
-    private lateinit var tvWindowFrom1: TextView
-    private lateinit var tvWindowTo1: TextView
-    private lateinit var tvWindowFrom2: TextView
-    private lateinit var tvWindowTo2: TextView
-    private lateinit var tvSkdFrom1: TextView
-    private lateinit var tvSkdTo1: TextView
-    private lateinit var tvSkdFrom2: TextView
-    private lateinit var tvSkdTo2: TextView
-    private lateinit var tvZubovFrom1: TextView
-    private lateinit var tvZubovTo1: TextView
-    private lateinit var tvZubovFrom2: TextView
-    private lateinit var tvZubovTo2: TextView
-    // Поля с количеством часов
-    private lateinit var tvWindowHours1: TextView
-    private lateinit var tvWindowHours2: TextView
-    private lateinit var tvSkdHours1: TextView
-    private lateinit var tvSkdHours2: TextView
-    private lateinit var tvZubovHours1: TextView
-    private lateinit var tvZubovHours2: TextView
-    
-    private lateinit var personnelRepository: PersonnelRepository
-    private lateinit var workTypeRepository: WorkTypeRepository
-    
-    // Переменные для хранения данных спиннеров
-    private var allMachinists: List<Personnel> = emptyList()
-    private var allNonManagers: List<Personnel> = emptyList()
-    private var currentMachinistQuery: String = ""
-    private var currentManagerQuery: String = ""
-    
-    // Константы для позиций в спиннерах
-    companion object {
-        private const val EMPTY_POSITION = 0
-        private const val ADD_POSITION = 1
-        private const val FIRST_PERSONNEL_POSITION = 2
-    }
+    private lateinit var tvWorkDayInfo: TextView
+    private lateinit var btnWorkDay: Button
+
+    private lateinit var workDayRepository: WorkDayRepository
+
+    // Текущая выбранная дата
+    private lateinit var selectedDate: Date
 
     override fun getLayoutResourceId(): Int = R.layout.activity_work
 
@@ -75,52 +38,29 @@ class WorkActivity : BaseActivity() {
 
         // Инициализация базы данных
         val database = AppDatabase.getDatabase(this)
-        personnelRepository = PersonnelRepository(database.personnelDao())
-        workTypeRepository = WorkTypeRepository(database.workTypeDao())
+        workDayRepository = WorkDayRepository(database.workDayDao())
 
         // Инициализация views
         customCalendarView = findViewById(R.id.customCalendarView)
         tvSelectedDate = findViewById(R.id.tvSelectedDate)
-        spinnerZubov = findViewById(R.id.spinnerZubov)
-        spinnerSkd = findViewById(R.id.spinnerSkd)
-        spinnerMachinist = findViewById(R.id.spinnerMachinist)
-        spinnerMachinist2 = findViewById(R.id.spinnerMachinist2)
-        spinnerManager = findViewById(R.id.spinnerManager)
-        spinnerPeregon1 = findViewById(R.id.spinnerPeregon1)
-        spinnerPeregon2 = findViewById(R.id.spinnerPeregon2)
-        // Поля времени
-        tvWindowFrom1 = findViewById(R.id.tvWindowFrom1)
-        tvWindowTo1 = findViewById(R.id.tvWindowTo1)
-        tvWindowFrom2 = findViewById(R.id.tvWindowFrom2)
-        tvWindowTo2 = findViewById(R.id.tvWindowTo2)
-        tvSkdFrom1 = findViewById(R.id.tvSkdFrom1)
-        tvSkdTo1 = findViewById(R.id.tvSkdTo1)
-        tvSkdFrom2 = findViewById(R.id.tvSkdFrom2)
-        tvSkdTo2 = findViewById(R.id.tvSkdTo2)
-        tvZubovFrom1 = findViewById(R.id.tvZubovFrom1)
-        tvZubovTo1 = findViewById(R.id.tvZubovTo1)
-        tvZubovFrom2 = findViewById(R.id.tvZubovFrom2)
-        tvZubovTo2 = findViewById(R.id.tvZubovTo2)
-        // Поля часов
-        tvWindowHours1 = findViewById(R.id.tvWindowHours1)
-        tvWindowHours2 = findViewById(R.id.tvWindowHours2)
-        tvSkdHours1 = findViewById(R.id.tvSkdHours1)
-        tvSkdHours2 = findViewById(R.id.tvSkdHours2)
-        tvZubovHours1 = findViewById(R.id.tvZubovHours1)
-        tvZubovHours2 = findViewById(R.id.tvZubovHours2)
-
-        initTimePickers()
-        initSpinners()
+        tvWorkDayInfo = findViewById(R.id.tvWorkDayInfo)
+        btnWorkDay = findViewById(R.id.btnWorkDay)
 
         // Установка текущей даты
         val today = Calendar.getInstance()
-        updateSelectedDate(today.time)
+        selectedDate = today.time
+        updateSelectedDate(selectedDate)
+
+        // Загрузка данных за выбранную дату
+        loadWorkDayInfo(selectedDate)
 
         // Обработчик выбора даты
         customCalendarView.setOnDateSelectedListener { year, month, dayOfMonth ->
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year, month, dayOfMonth)
-            updateSelectedDate(selectedDate.time)
+            val newSelectedDate = Calendar.getInstance()
+            newSelectedDate.set(year, month, dayOfMonth)
+            selectedDate = newSelectedDate.time
+            updateSelectedDate(selectedDate)
+            loadWorkDayInfo(selectedDate)
             // Обновляем подсветку выбранной даты
             customCalendarView.generateCalendar()
         }
@@ -130,9 +70,16 @@ class WorkActivity : BaseActivity() {
             // Обновление заголовка больше не нужно
         }
 
+        // Обработчик кнопки "Рабочий день"
+        btnWorkDay.setOnClickListener {
+            val intent = Intent(this, WorkDayActivity::class.java).apply {
+                putExtra("selected_date", selectedDate)
+            }
+            startActivity(intent)
+        }
 
-
-
+        // Настройка выделения дат в календаре
+        setupCalendarHighlighting()
 
         // Обновляем цвета календаря при возврате в активность
         updateCalendarColors()
@@ -144,296 +91,70 @@ class WorkActivity : BaseActivity() {
         }
     }
 
-    private fun initTimePickers() {
-        val timeFields = listOf(
-            tvWindowFrom1, tvWindowTo1, tvWindowFrom2, tvWindowTo2,
-            tvSkdFrom1, tvSkdTo1, tvSkdFrom2, tvSkdTo2,
-            tvZubovFrom1, tvZubovTo1, tvZubovFrom2, tvZubovTo2
-        )
-
-        timeFields.forEach { textView ->
-            textView.setOnClickListener {
-                showTimePicker(textView)
-            }
-        }
-    }
-
-    private fun showTimePicker(target: TextView) {
-        // Стартуем всегда с 00:00
-        val hour = 0
-        val minute = 0
-
-        val listener = TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-            val timeText = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
-            target.text = timeText
-            recalculateAllHours()
-        }
-
-        val dialog = TimePickerDialog(this, listener, hour, minute, true)
-        dialog.show()
-    }
-
-    private fun recalculateAllHours() {
-        calculateHoursForPair(tvWindowFrom1, tvWindowTo1, tvWindowHours1)
-        calculateHoursForPair(tvWindowFrom2, tvWindowTo2, tvWindowHours2)
-        calculateHoursForPair(tvSkdFrom1, tvSkdTo1, tvSkdHours1)
-        calculateHoursForPair(tvSkdFrom2, tvSkdTo2, tvSkdHours2)
-        calculateHoursForPair(tvZubovFrom1, tvZubovTo1, tvZubovHours1)
-        calculateHoursForPair(tvZubovFrom2, tvZubovTo2, tvZubovHours2)
-    }
-
-    private fun calculateHoursForPair(fromView: TextView, toView: TextView, hoursView: TextView) {
-        val fromText = fromView.text?.toString() ?: ""
-        val toText = toView.text?.toString() ?: ""
-
-        if (fromText == "--:--" || toText == "--:--" || fromText.isBlank() || toText.isBlank()) {
-            hoursView.text = ""
-            return
-        }
-
-        fun parseTime(value: String): Int? {
-            val parts = value.split(":")
-            if (parts.size != 2) return null
-            val h = parts[0].toIntOrNull() ?: return null
-            val m = parts[1].toIntOrNull() ?: return null
-            return h * 60 + m
-        }
-
-        val fromMinutes = parseTime(fromText)
-        val toMinutes = parseTime(toText)
-
-        if (fromMinutes == null || toMinutes == null) {
-            hoursView.text = ""
-            return
-        }
-
-        val diffMinutes = toMinutes - fromMinutes
-        if (diffMinutes <= 0) {
-            hoursView.text = ""
-            return
-        }
-
-        val fullHoursRoundedUp = (diffMinutes + 59) / 60 // округление вверх
-        hoursView.text = fullHoursRoundedUp.toString()
-    }
-
-    private fun initSpinners() {
-        // Инициализация спиннеров с данными из базы
+    private fun loadWorkDayInfo(date: Date) {
         lifecycleScope.launch {
             try {
-                // Получаем все данные из базы данных
-                allMachinists = personnelRepository.getMachinists()
-                allNonManagers = personnelRepository.getNonManagers()
-                
-                // Инициализируем спиннеры с полными данными
-                updateMachinistSpinners()
-                updateManagerSpinners()
-                
-                // Остальные спиннеры с данными
-                val peregonItems = listOf("—", "Перегон А-Б", "Перегон В-Г", "Перегон Д-Е")
-                
-                // Привязываем данные к спиннерам
-                spinnerPeregon1.bind(peregonItems)
-                spinnerPeregon2.bind(peregonItems)
-                
-                // Инициализируем спиннеры видов работ
-                updateWorkTypeSpinners("зубов", spinnerZubov)
-                updateWorkTypeSpinners("скд", spinnerSkd)
+                val workDay = workDayRepository.getWorkDayByDate(date.time)
+                if (workDay != null) {
+                    val info = buildString {
+                        workDay.zubovWorkType?.let { append("Зубов: $it\n") }
+                        workDay.skdWorkType?.let { append("СКД: $it\n") }
+                        workDay.machinist1?.let { append("Машинист 1: $it\n") }
+                        workDay.machinist2?.let { append("Машинист 2: $it\n") }
+                        workDay.manager?.let { append("Руководитель: $it\n") }
+                        workDay.peregon1?.let { append("Перегон 1: $it\n") }
+                        workDay.peregon2?.let { append("Перегон 2: $it\n") }
 
+                        // Время работы
+                        val timeInfo = mutableListOf<String>()
+                        if (workDay.windowFrom1 != null && workDay.windowTo1 != null) {
+                            timeInfo.add("Окно: ${workDay.windowFrom1}-${workDay.windowTo1}")
+                        }
+                        if (workDay.windowFrom2 != null && workDay.windowTo2 != null) {
+                            timeInfo.add("Окно 2: ${workDay.windowFrom2}-${workDay.windowTo2}")
+                        }
+                        if (workDay.skdFrom1 != null && workDay.skdTo1 != null) {
+                            timeInfo.add("СКД: ${workDay.skdFrom1}-${workDay.skdTo1}")
+                        }
+                        if (workDay.skdFrom2 != null && workDay.skdTo2 != null) {
+                            timeInfo.add("СКД 2: ${workDay.skdFrom2}-${workDay.skdTo2}")
+                        }
+                        if (workDay.zubovFrom1 != null && workDay.zubovTo1 != null) {
+                            timeInfo.add("Зубов: ${workDay.zubovFrom1}-${workDay.zubovTo1}")
+                        }
+                        if (workDay.zubovFrom2 != null && workDay.zubovTo2 != null) {
+                            timeInfo.add("Зубов 2: ${workDay.zubovFrom2}-${workDay.zubovTo2}")
+                        }
+                        if (timeInfo.isNotEmpty()) {
+                            append("Время работы: ${timeInfo.joinToString(", ")}")
+                        }
+                    }
+                    tvWorkDayInfo.text = info.trim()
+                } else {
+                    tvWorkDayInfo.text = "Нет данных за выбранную дату"
+                }
             } catch (e: Exception) {
-                // В случае ошибки используем временные данные
-                initSpinnersWithFallback()
+                tvWorkDayInfo.text = "Ошибка загрузки данных"
             }
         }
     }
 
-    private fun <T> Spinner.bind(items: List<T>) {
-        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, items)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        this.adapter = adapter
-    }
-    
-    private fun updateMachinistSpinners() {
-        val machinistItems = mutableListOf<String>()
-        machinistItems.add("") // Пустая строка
-        machinistItems.add("Добавить...") // Опция добавления
-        
-        val filteredMachinists = if (currentMachinistQuery.isBlank()) {
-            allMachinists
-        } else {
-            allMachinists.filter { 
-                it.fullName.contains(currentMachinistQuery, ignoreCase = true) 
-            }
-        }
-        
-        machinistItems.addAll(filteredMachinists.map { it.fullName })
-        
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, machinistItems)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        
-        // Сохраняем текущие позиции
-        val currentPosition1 = spinnerMachinist.selectedItemPosition
-        val currentPosition2 = spinnerMachinist2.selectedItemPosition
-        
-        spinnerMachinist.adapter = adapter
-        spinnerMachinist2.adapter = adapter
-        
-        // Восстанавливаем позиции если они валидны
-        if (currentPosition1 < machinistItems.size) {
-            spinnerMachinist.setSelection(currentPosition1)
-        }
-        if (currentPosition2 < machinistItems.size) {
-            spinnerMachinist2.setSelection(currentPosition2)
-        }
-        
-        // Добавляем обработчики событий
-        setupMachinistSpinnerListeners()
-    }
-    
-    private fun updateManagerSpinners() {
-        val managerItems = mutableListOf<String>()
-        managerItems.add("") // Пустая строка
-        managerItems.add("Добавить...") // Опция добавления
-        
-        // allNonManagers содержит работников, которые НЕ являются машинистами (включая руководителей)
-        val filteredManagers = if (currentManagerQuery.isBlank()) {
-            allNonManagers
-        } else {
-            allNonManagers.filter { 
-                it.fullName.contains(currentManagerQuery, ignoreCase = true) 
-            }
-        }
-        
-        managerItems.addAll(filteredManagers.map { it.fullName })
-        
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, managerItems)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        
-        // Сохраняем текущую позицию
-        val currentPosition = spinnerManager.selectedItemPosition
-        
-        spinnerManager.adapter = adapter
-        
-        // Восстанавливаем позицию если она валидна
-        if (currentPosition < managerItems.size) {
-            spinnerManager.setSelection(currentPosition)
-        }
-        
-        // Добавляем обработчик событий
-        setupManagerSpinnerListeners()
-    }
-    
-    // Методы для поиска (можно вызывать извне)
-    fun searchMachinists(query: String) {
-        currentMachinistQuery = query
-        updateMachinistSpinners()
-    }
-    
-    fun searchManagers(query: String) {
-        currentManagerQuery = query
-        updateManagerSpinners()
-    }
-    
-    // Пример использования поиска (можно вызывать из других частей приложения)
-    fun performSearch(query: String) {
-        searchMachinists(query)
-        searchManagers(query)
-    }
-    
-    // Сброс поиска - показать всех работников
-    fun resetSearch() {
-        currentMachinistQuery = ""
-        currentManagerQuery = ""
-        updateMachinistSpinners()
-        updateManagerSpinners()
-    }
-    
-    private fun setupMachinistSpinnerListeners() {
-        // Обработчик для первого спиннера машинистов
-        spinnerMachinist.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == ADD_POSITION) {
-                    openPersonnelActivity("машинист")
-                    // Возвращаем к пустой позиции
-                    spinnerMachinist.setSelection(EMPTY_POSITION)
+    private fun setupCalendarHighlighting() {
+        // Получаем все даты с записями и передаем в календарь для выделения
+        lifecycleScope.launch {
+            try {
+                workDayRepository.getAllWorkDayDates().collect { timestamps ->
+                    val dates = timestamps.map { Date(it) }.toSet()
+                    customCalendarView.setHighlightedDates(dates)
+                    customCalendarView.generateCalendar()
                 }
+            } catch (e: Exception) {
+                // В случае ошибки ничего не делаем
             }
-            
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-        
-        // Обработчик для второго спиннера машинистов
-        spinnerMachinist2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == ADD_POSITION) {
-                    openPersonnelActivity("машинист")
-                    // Возвращаем к пустой позиции
-                    spinnerMachinist2.setSelection(EMPTY_POSITION)
-                }
-            }
-            
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
-    
-    private fun setupManagerSpinnerListeners() {
-        // Обработчик для спиннера руководителей
-        spinnerManager.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == ADD_POSITION) {
-                    openPersonnelActivity("руководитель")
-                    // Возвращаем к пустой позиции
-                    spinnerManager.setSelection(EMPTY_POSITION)
-                }
-            }
-            
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
-    
-    private fun openPersonnelActivity(position: String) {
-        val intent = Intent(this, PersonnelActivity::class.java).apply {
-            putExtra("suggested_position", position)
-        }
-        startActivity(intent)
-    }
-    
-    private fun initSpinnersWithFallback() {
-        // Временные списки значений в случае ошибки
-        val zubovItems = listOf("", "Прогрев рельсов плети", "Обслуживание и ремонт", "Заправка дизтопливом", "Добавить...")
-        val skdItems = listOf("", "Подача воздуха", "Обслуживание и ремонт", "Заправка дизтопливом", "Добавить...")
-        val machinistItems = listOf("", "Добавить...", "Машинист 1", "Машинист 2")
-        val managerItems = listOf("", "Добавить...", "Руководитель 1", "Руководитель 2")
-        val peregonItems = listOf("—", "Перегон А-Б", "Перегон В-Г", "Перегон Д-Е")
-
-        spinnerZubov.bind(zubovItems)
-        spinnerSkd.bind(skdItems)
-        spinnerMachinist.bind(machinistItems)
-        spinnerMachinist2.bind(machinistItems)
-        spinnerManager.bind(managerItems)
-        spinnerPeregon1.bind(peregonItems)
-        spinnerPeregon2.bind(peregonItems)
-
-        setupSpinnerListenersForFallback(spinnerZubov, "зубов")
-        setupSpinnerListenersForFallback(spinnerSkd, "скд")
-        setupMachinistSpinnerListeners()
-        setupManagerSpinnerListeners()
-    }
-
-    private fun setupSpinnerListenersForFallback(spinner: Spinner, type: String) {
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position == spinner.adapter.count - 1) { // Если выбрана последняя опция ("Добавить...")
-                    showAddWorkTypeDialog(type)
-                    spinner.setSelection(EMPTY_POSITION) // Возвращаем к пустой позиции
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-        private fun updateSelectedDate(date: Date) {
+    private fun updateSelectedDate(date: Date) {
         val calendar = Calendar.getInstance()
         calendar.time = date
         val day = calendar.get(Calendar.DAY_OF_MONTH)
@@ -453,87 +174,11 @@ class WorkActivity : BaseActivity() {
         super.onResume()
         // Обновляем цвета календаря при возврате в активность
         updateCalendarColors()
-        
-        // Обновляем данные спиннеров на случай, если были добавлены новые работники
-        refreshSpinnerData()
-    }
-    
-    private fun refreshSpinnerData() {
-        lifecycleScope.launch {
-            try {
-                // Обновляем данные из базы
-                allMachinists = personnelRepository.getMachinists()
-                allNonManagers = personnelRepository.getNonManagers()
-                
-                // Обновляем спиннеры
-                updateMachinistSpinners()
-                updateManagerSpinners()
 
-                // Обновляем спиннеры видов работ
-                updateWorkTypeSpinners("зубов", spinnerZubov)
-                updateWorkTypeSpinners("скд", spinnerSkd)
+        // Обновляем данные за выбранную дату (на случай если были изменения)
+        loadWorkDayInfo(selectedDate)
 
-            } catch (e: Exception) {
-                // В случае ошибки ничего не делаем
-            }
-        }
-    }
-
-    private fun updateWorkTypeSpinners(type: String, spinner: Spinner) {
-        lifecycleScope.launch {
-            workTypeRepository.getWorkTypesByType(type).collect { workTypes ->
-                val items = mutableListOf("") // Пустая строка
-                items.addAll(workTypes.map { it.name })
-                items.add("Добавить...") // Опция добавления
-
-                val adapter = ArrayAdapter(this@WorkActivity, android.R.layout.simple_spinner_item, items)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.adapter = adapter
-
-                // Сохраняем текущую позицию
-                val currentPosition = spinner.selectedItemPosition
-
-                // Восстанавливаем позицию, если она валидна
-                if (currentPosition < items.size) {
-                    spinner.setSelection(currentPosition)
-                }
-
-                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        if (position == items.size - 1) { // Если выбрана последняя опция ("Добавить...")
-                            showAddWorkTypeDialog(type)
-                            spinner.setSelection(EMPTY_POSITION) // Возвращаем к пустой позиции
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
-            }
-        }
-    }
-
-    private fun showAddWorkTypeDialog(type: String) {
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle("Добавить вид работы")
-
-        val input = android.widget.EditText(this)
-        input.hint = "Введите название вида работы"
-        builder.setView(input)
-
-        builder.setPositiveButton("Добавить") { dialog, _ ->
-            val workTypeName = input.text.toString().trim()
-            if (workTypeName.isNotEmpty()) {
-                lifecycleScope.launch {
-                    workTypeRepository.insert(WorkType(name = workTypeName, type = type))
-                    // После добавления обновим спиннеры
-                    updateWorkTypeSpinners(type, if (type == "зубов") spinnerZubov else spinnerSkd)
-                }
-            }
-            dialog.dismiss()
-        }
-        builder.setNegativeButton("Отмена") { dialog, _ ->
-            dialog.cancel()
-        }
-        builder.show()
+        // Обновляем выделение дат
+        setupCalendarHighlighting()
     }
 }

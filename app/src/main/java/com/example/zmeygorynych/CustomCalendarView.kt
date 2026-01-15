@@ -28,6 +28,7 @@ class CustomCalendarView @JvmOverloads constructor(
     private var selectedDate: Calendar = Calendar.getInstance()
     private var currentSelectedDate: Calendar = Calendar.getInstance()
     private var appSettings: AppSettings? = null
+    private var highlightedDates: Set<Date> = emptySet()
 
     private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
         private val SWIPE_THRESHOLD = 100
@@ -164,6 +165,15 @@ class CustomCalendarView @JvmOverloads constructor(
                            monthCalendar.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH) &&
                            monthCalendar.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR)
 
+            // Проверяем, является ли день выделенным (есть данные)
+            val isHighlighted = highlightedDates.any { highlightedDate ->
+                val cal = Calendar.getInstance()
+                cal.time = highlightedDate
+                day == cal.get(Calendar.DAY_OF_MONTH) &&
+                monthCalendar.get(Calendar.MONTH) == cal.get(Calendar.MONTH) &&
+                monthCalendar.get(Calendar.YEAR) == cal.get(Calendar.YEAR)
+            }
+
             // Проверяем, является ли день выходным
             val dayOfWeek = monthCalendar.get(Calendar.DAY_OF_WEEK)
             val isWeekend = dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY
@@ -178,6 +188,10 @@ class CustomCalendarView @JvmOverloads constructor(
                 isToday -> {
                     val currentColor = appSettings?.currentDayColor ?: Color.parseColor("#00BCD4")
                     setTextColor(currentColor)
+                    setBackgroundColor(Color.TRANSPARENT)
+                }
+                isHighlighted -> {
+                    setTextColor(Color.parseColor("#4CAF50")) // Зеленый для выделенных дат
                     setBackgroundColor(Color.TRANSPARENT)
                 }
                 isWeekend -> {
@@ -241,6 +255,11 @@ class CustomCalendarView @JvmOverloads constructor(
 
     fun updateColors() {
         // Обновляем цвета календаря при изменении настроек
+        generateCalendar()
+    }
+
+    fun setHighlightedDates(dates: Set<Date>) {
+        highlightedDates = dates
         generateCalendar()
     }
 
