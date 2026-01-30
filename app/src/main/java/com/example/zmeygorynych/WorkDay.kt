@@ -2,6 +2,7 @@ package com.example.zmeygorynych
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Ignore
 import java.util.Date
 
 @Entity(tableName = "work_days")
@@ -41,10 +42,31 @@ data class WorkDay(
     val zubovTo2: String? = null,
 
     // Часы (можно вычислять, но сохраним для удобства)
+    // Старые поля сохраняем для обратной совместимости
     val windowHours1: Int? = null,
     val windowHours2: Int? = null,
     val skdHours1: Int? = null,
     val skdHours2: Int? = null,
     val zubovHours1: Int? = null,
-    val zubovHours2: Int? = null
-)
+    val zubovHours2: Int? = null,
+
+    // Новые поля для сумм
+    val windowHoursSum: Int? = null,
+    val skdHoursSum: Int? = null,
+    val zubovHoursSum: Int? = null
+) {
+    @Ignore
+    fun getWindowHoursTotal(): Int {
+        return windowHoursSum ?: ((windowHours1 ?: 0) + (windowHours2 ?: 0))
+    }
+
+    @Ignore
+    fun getSkdHoursTotal(): Int {
+        return skdHoursSum ?: ((skdHours1 ?: 0) + (skdHours2 ?: 0))
+    }
+
+    @Ignore
+    fun getZubovHoursTotal(): Int {
+        return zubovHoursSum ?: ((zubovHours1 ?: 0) + (zubovHours2 ?: 0))
+    }
+}

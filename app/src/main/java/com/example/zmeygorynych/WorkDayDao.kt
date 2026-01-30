@@ -16,6 +16,9 @@ interface WorkDayDao {
     @Query("SELECT date FROM work_days ORDER BY date")
     fun getAllWorkDayDates(): Flow<List<Long>>
 
+    @Query("SELECT * FROM work_days ORDER BY date")
+    suspend fun getAllWorkDays(): List<WorkDay>
+
     @Query("SELECT * FROM work_days WHERE date >= :startDate AND date <= :endDate ORDER BY date")
     fun getWorkDaysInRange(startDate: Long, endDate: Long): Flow<List<WorkDay>>
 

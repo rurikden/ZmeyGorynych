@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="ПМСГ → Главный инженер (ПМС)"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="14sp"
             android:textStyle="bold" />
 

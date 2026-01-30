@@ -136,6 +136,15 @@ class PersonnelActivity : BaseActivity() {
                 // Добавление нового сотрудника
                 viewModel.addPersonnel(lastName, firstName, middleName, position, company)
                 Toast.makeText(this, "Работник добавлен", Toast.LENGTH_SHORT).show()
+
+                // Возвращаем результат в вызывающую активность
+                val fullName = "$lastName $firstName ${if (middleName.isNotEmpty()) middleName else ""}".trim()
+                val resultIntent = Intent().apply {
+                    putExtra("added_personnel_name", fullName)
+                    putExtra("added_personnel_position", position)
+                }
+                setResult(RESULT_OK, resultIntent)
+
                 clearFields()
             }
         } catch (e: Exception) {

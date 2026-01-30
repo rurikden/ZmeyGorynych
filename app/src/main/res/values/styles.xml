@@ -1,22 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Стиль для NumberPicker в темной теме -->
-    <style name="NumberPickerStyle" parent="Theme.Material3.DayNight">
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:textColorSecondary">#CCCCCC</item>
-        <item name="android:colorControlNormal">#4CAF50</item>
-        <item name="android:colorAccent">#4CAF50</item>
-        <item name="android:background">#1A1A1A</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.ZmeyGorynych" parent="Theme.Material3.DayNight">
+        <!-- Замените android:colorBackground на правильные атрибуты -->
+        <item name="android:colorBackground">@color/white</item> <!-- УДАЛИТЬ ЭТУ СТРОКУ -->
+        <item name="colorSurface">@color/white</item>
+
+        <!-- Добавьте цвет фона через colorSurface -->
+        <item name="android:windowBackground">@color/white</item>
+        <item name="colorPrimarySurface">@color/white</item>
     </style>
 
-    <!-- Стиль для полноэкранного диалога -->
-    <style name="FullScreenDialog" parent="Theme.Material3.DayNight.Dialog">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+    <style name="Theme.ZmeyGorynych" parent="Base.Theme.ZmeyGorynych">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryContainer">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryContainer">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        <item name="colorSurfaceVariant">#FFF5F5F5</item>
+        <item name="colorOnBackground">@color/black</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorOnSurfaceVariant">@color/black</item>
+
+        <item name="colorError">#FFB00020</item>
+        <item name="colorErrorContainer">#FFF9DEDC</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="colorOnErrorContainer">#FF410E0B</item>
+
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">#FF666666</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+
+        <!-- Явно укажите цвет фона для Activity -->
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="CalendarTheme" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryContainer">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryContainer">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:weekDayTextAppearance">@style/CalendarWeekText</item>
+        <item name="android:dateTextAppearance">@style/CalendarDateText</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="CalendarDateText" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CalendarWeekText" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

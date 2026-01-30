@@ -13,6 +13,10 @@ class WorkDayRepository(private val workDayDao: WorkDayDao) {
         return workDayDao.getWorkDayByDate(date)
     }
 
+    suspend fun getAllWorkDays(): List<WorkDay> {
+        return workDayDao.getAllWorkDays()
+    }
+
     fun getAllWorkDayDates(): Flow<List<Long>> {
         return workDayDao.getAllWorkDayDates()
     }

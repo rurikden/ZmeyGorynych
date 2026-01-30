@@ -14,7 +14,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -54,6 +53,8 @@ dependencies {
     // Lifecycle dependencies
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+
+    implementation("com.github.skydoves:colorpickerview:2.2.4")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

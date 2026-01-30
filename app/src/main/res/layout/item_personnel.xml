@@ -24,7 +24,7 @@
             android:layout_marginBottom="6dp"
             android:gravity="start"
             android:text="ФИО"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="Полная должность"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="13sp" />
 
     </LinearLayout>

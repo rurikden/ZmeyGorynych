@@ -2,10 +2,12 @@ package com.example.zmeygorynych
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -22,6 +24,8 @@ class WorkActivity : BaseActivity() {
     private lateinit var tvSelectedDate: TextView
     private lateinit var tvWorkDayInfo: TextView
     private lateinit var btnWorkDay: Button
+    private lateinit var cardCalendar: androidx.cardview.widget.CardView
+    private lateinit var cardWorkDayInfo: androidx.cardview.widget.CardView
 
     private lateinit var workDayRepository: WorkDayRepository
 
@@ -45,22 +49,35 @@ class WorkActivity : BaseActivity() {
         tvSelectedDate = findViewById(R.id.tvSelectedDate)
         tvWorkDayInfo = findViewById(R.id.tvWorkDayInfo)
         btnWorkDay = findViewById(R.id.btnWorkDay)
+        cardCalendar = findViewById(R.id.cardCalendar)
+        cardWorkDayInfo = findViewById(R.id.cardWorkDayInfo)
 
-        // Установка текущей даты
+        // Установка текущей даты (нормализованной к началу дня)
         val today = Calendar.getInstance()
+        today.set(Calendar.HOUR_OF_DAY, 0)
+        today.set(Calendar.MINUTE, 0)
+        today.set(Calendar.SECOND, 0)
+        today.set(Calendar.MILLISECOND, 0)
         selectedDate = today.time
         updateSelectedDate(selectedDate)
 
         // Загрузка данных за выбранную дату
         loadWorkDayInfo(selectedDate)
+        updateWorkDayButton(selectedDate)
 
         // Обработчик выбора даты
         customCalendarView.setOnDateSelectedListener { year, month, dayOfMonth ->
             val newSelectedDate = Calendar.getInstance()
             newSelectedDate.set(year, month, dayOfMonth)
+            // Нормализуем дату к началу дня
+            newSelectedDate.set(Calendar.HOUR_OF_DAY, 0)
+            newSelectedDate.set(Calendar.MINUTE, 0)
+            newSelectedDate.set(Calendar.SECOND, 0)
+            newSelectedDate.set(Calendar.MILLISECOND, 0)
             selectedDate = newSelectedDate.time
             updateSelectedDate(selectedDate)
             loadWorkDayInfo(selectedDate)
+            updateWorkDayButton(selectedDate)
             // Обновляем подсветку выбранной даты
             customCalendarView.generateCalendar()
         }
@@ -94,7 +111,21 @@ class WorkActivity : BaseActivity() {
     private fun loadWorkDayInfo(date: Date) {
         lifecycleScope.launch {
             try {
-                val workDay = workDayRepository.getWorkDayByDate(date.time)
+                // Нормализуем дату к началу дня (убираем время)
+                val calendar = Calendar.getInstance()
+                calendar.time = date
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                val normalizedDate = calendar.time
+
+                android.util.Log.d("WorkActivity", "Loading work day info for date: ${normalizedDate.time}")
+
+                val workDay = workDayRepository.getWorkDayByDate(normalizedDate.time)
+
+                android.util.Log.d("WorkActivity", "Work day loaded: $workDay")
+
                 if (workDay != null) {
                     val info = buildString {
                         workDay.zubovWorkType?.let { append("Зубов: $it\n") }
@@ -139,15 +170,46 @@ class WorkActivity : BaseActivity() {
         }
     }
 
+    private fun updateWorkDayButton(date: Date) {
+        lifecycleScope.launch {
+            try {
+                // Нормализуем дату к началу дня
+                val calendar = Calendar.getInstance()
+                calendar.time = date
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                val normalizedDate = calendar.time
+
+                val workDay = workDayRepository.getWorkDayByDate(normalizedDate.time)
+                if (workDay != null) {
+                    // Есть данные - показываем "Редактировать"
+                    btnWorkDay.text = "Редактировать"
+                    btnWorkDay.setBackgroundColor(ContextCompat.getColor(this@WorkActivity, R.color.teal_500))
+                } else {
+                    // Нет данных - показываем "Рабочий день"
+                    btnWorkDay.text = "Рабочий день"
+                    btnWorkDay.setBackgroundColor(ContextCompat.getColor(this@WorkActivity, R.color.purple_500))
+                }
+            } catch (e: Exception) {
+                // В случае ошибки используем стандартный текст
+                btnWorkDay.text = "Рабочий день"
+                btnWorkDay.setBackgroundColor(ContextCompat.getColor(this@WorkActivity, R.color.purple_500))
+            }
+        }
+    }
+
     private fun setupCalendarHighlighting() {
         // Получаем все даты с записями и передаем в календарь для выделения
         lifecycleScope.launch {
             try {
-                workDayRepository.getAllWorkDayDates().collect { timestamps ->
-                    val dates = timestamps.map { Date(it) }.toSet()
-                    customCalendarView.setHighlightedDates(dates)
-                    customCalendarView.generateCalendar()
-                }
+                // Вместо collect используем прямой запрос к базе данных
+                val workDays = workDayRepository.getAllWorkDays()
+                val dates = workDays.map { Date(it.date) }.toSet()
+                customCalendarView.setHighlightedDates(dates)
+                // Принудительно перерисовываем календарь
+                customCalendarView.generateCalendar()
             } catch (e: Exception) {
                 // В случае ошибки ничего не делаем
             }
@@ -177,8 +239,27 @@ class WorkActivity : BaseActivity() {
 
         // Обновляем данные за выбранную дату (на случай если были изменения)
         loadWorkDayInfo(selectedDate)
+        updateWorkDayButton(selectedDate)
 
-        // Обновляем выделение дат
+        // Применяем настройки цветов интерфейса
+        applyBackgroundColor()
+        applyCardBackgroundColor()
+
+        // Обновляем выделение дат и перерисовываем календарь
         setupCalendarHighlighting()
+    }
+
+    private fun applyBackgroundColor() {
+        val appSettings = AppSettings.getInstance(this)
+        // Изменяем цвет фона текущей активности
+        val rootView = findViewById<View>(android.R.id.content)
+        rootView.setBackgroundColor(appSettings.backgroundColor)
+    }
+
+    private fun applyCardBackgroundColor() {
+        val appSettings = AppSettings.getInstance(this)
+        // Изменяем цвет фона карточек
+        cardCalendar.setCardBackgroundColor(appSettings.cardBackgroundColor)
+        cardWorkDayInfo.setCardBackgroundColor(appSettings.cardBackgroundColor)
     }
 }

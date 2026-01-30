@@ -40,24 +40,44 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginBottom="24dp"
                         android:gravity="center"
                         android:text="@string/settings_title"
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:textStyle="bold" />
 
-                    <!-- Секция внешнего вида -->
-                    <TextView
+                    <!-- Вкладки -->
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/settingsTabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="@string/appearance_settings"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:layout_marginBottom="24dp"
+                        app:tabBackground="@drawable/tab_selected_background"
+                        app:tabGravity="fill"
+                        app:tabIndicator="@null"
+                        app:tabMode="fixed"
+                        app:tabSelectedTextColor="?attr/colorOnPrimary"
+                        app:tabTextColor="?attr/colorOnSurface" />
 
-                    <!-- Настройки цветов календаря -->
+                    <!-- Контейнер для контента вкладок -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!-- Вкладка "Внешний вид" -->
+                        <ScrollView
+                            android:id="@+id/appearanceTab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <!-- Настройки цветов календаря -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -175,11 +195,223 @@
 
                             </LinearLayout>
 
-                        </LinearLayout>
+                                </LinearLayout>
 
-                    </androidx.cardview.widget.CardView>
+                            </androidx.cardview.widget.CardView>
 
-                    <!-- Настройки темы -->
+                            <!-- Настройки цветов фона -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                app:cardCornerRadius="8dp"
+                                app:cardElevation="4dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="16dp">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="16dp"
+                                        android:text="Цвета интерфейса"
+                                        android:textColor="@color/black"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+
+                                    <!-- Цвет фона -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="12dp"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                        <View
+                                            android:id="@+id/backgroundColorPreview"
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:layout_marginEnd="16dp"
+                                            android:background="@drawable/color_preview_background" />
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="@string/background_color"
+                                            android:textColor="@color/black"
+                                            android:textSize="16sp" />
+
+                                        <Button
+                                            android:id="@+id/btnBackgroundColor"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/change_color"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                    <!-- Цвет карточек -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="12dp"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                        <View
+                                            android:id="@+id/cardBackgroundColorPreview"
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:layout_marginEnd="16dp"
+                                            android:background="@drawable/color_preview_background" />
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="@string/card_background_color"
+                                            android:textColor="@color/black"
+                                            android:textSize="16sp" />
+
+                                        <Button
+                                            android:id="@+id/btnCardBackgroundColor"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/change_color"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Настройки спиннеров -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                app:cardCornerRadius="8dp"
+                                app:cardElevation="4dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="16dp">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="16dp"
+                                        android:text="@string/spinner_settings"
+                                        android:textColor="@color/black"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+
+                                    <!-- Цвет спиннеров -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="12dp"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                        <View
+                                            android:id="@+id/spinnerColorPreview"
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:layout_marginEnd="16dp"
+                                            android:background="@drawable/color_preview_background" />
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="@string/spinner_color"
+                                            android:textColor="@color/black"
+                                            android:textSize="16sp" />
+
+                                        <Button
+                                            android:id="@+id/btnSpinnerColor"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/change_color"
+                                            android:textSize="14sp" />
+
+                                    </LinearLayout>
+
+                                    <!-- Закругление спиннеров -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="12dp"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="@string/spinner_corner_radius"
+                                            android:textColor="@color/black"
+                                            android:textSize="16sp" />
+
+                                        <TextView
+                                            android:id="@+id/spinnerCornerRadiusValue"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="16dp"
+                                            android:text="8dp"
+                                            android:textColor="?attr/colorPrimary"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <com.google.android.material.slider.Slider
+                                            android:id="@+id/spinnerCornerRadiusSlider"
+                                            android:layout_width="120dp"
+                                            android:layout_height="wrap_content"
+                                            android:valueFrom="0"
+                                            android:valueTo="20"
+                                            android:value="8"
+                                            android:stepSize="1" />
+
+                                    </LinearLayout>
+
+                                    <!-- Кнопка сброса настроек спиннеров -->
+                                    <Button
+                                        android:id="@+id/btnResetSpinnerSettings"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="end"
+                                        android:text="@string/reset_to_default"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                            </androidx.cardview.widget.CardView>
+
+                            </LinearLayout>
+
+                        </ScrollView>
+
+                        <!-- Вкладка "Системные" -->
+                        <ScrollView
+                            android:id="@+id/systemTab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <!-- Настройки темы -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -239,6 +471,196 @@
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                        </ScrollView>
+
+                        <!-- Вкладка "Топливо" -->
+                        <ScrollView
+                            android:id="@+id/fuelTab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <!-- Выбор летних месяцев -->
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="16dp"
+                                    app:cardCornerRadius="8dp"
+                                    app:cardElevation="4dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:padding="16dp">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="8dp"
+                                            android:text="@string/summer_months"
+                                            android:textColor="@color/black"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="16dp"
+                                            android:text="@string/summer_months_description"
+                                            android:textColor="@color/black"
+                                            android:textSize="14sp" />
+
+                                        <com.google.android.material.chip.ChipGroup
+                                            android:id="@+id/summerMonthsChipGroup"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            app:chipSpacing="8dp"
+                                            app:chipSpacingHorizontal="8dp"
+                                            app:chipSpacingVertical="8dp"
+                                            app:singleSelection="false" />
+
+                                    </LinearLayout>
+
+                                </androidx.cardview.widget.CardView>
+
+                                <!-- Расход топлива - Зубов -->
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="16dp"
+                                    app:cardCornerRadius="8dp"
+                                    app:cardElevation="4dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:padding="16dp">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="16dp"
+                                            android:text="@string/zubov_fuel_consumption"
+                                            android:textColor="@color/black"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold" />
+
+                                        <!-- Лето -->
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="12dp"
+                                            android:hint="@string/summer_fuel"
+                                            app:endIconMode="clear_text"
+                                            app:suffixText="кг/час">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etZubovSummerFuel"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:inputType="numberDecimal"
+                                                android:textSize="16sp" />
+
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                        <!-- Зима -->
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="@string/winter_fuel"
+                                            app:endIconMode="clear_text"
+                                            app:suffixText="кг/час">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etZubovWinterFuel"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:inputType="numberDecimal"
+                                                android:textSize="16sp" />
+
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                    </LinearLayout>
+
+                                </androidx.cardview.widget.CardView>
+
+                                <!-- Расход топлива - СКД -->
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="16dp"
+                                    app:cardCornerRadius="8dp"
+                                    app:cardElevation="4dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:padding="16dp">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="16dp"
+                                            android:text="@string/skd_fuel_consumption"
+                                            android:textColor="@color/black"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold" />
+
+                                        <!-- Лето -->
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="12dp"
+                                            android:hint="@string/summer_fuel"
+                                            app:endIconMode="clear_text"
+                                            app:suffixText="кг/час">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etSkdSummerFuel"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:inputType="numberDecimal"
+                                                android:textSize="16sp" />
+
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                        <!-- Зима -->
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="@string/winter_fuel"
+                                            app:endIconMode="clear_text"
+                                            app:suffixText="кг/час">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etSkdWinterFuel"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:inputType="numberDecimal"
+                                                android:textSize="16sp" />
+
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                    </LinearLayout>
+
+                                </androidx.cardview.widget.CardView>
+
+                            </LinearLayout>
+
+                        </ScrollView>
+
+                    </FrameLayout>
 
                     <Button
                         android:id="@+id/btnOpenMenu"

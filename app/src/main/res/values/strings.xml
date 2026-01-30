@@ -27,4 +27,35 @@
     <string name="brightness">Яркость</string>
     <string name="cancel">Отмена</string>
     <string name="ok">ОК</string>
+    <string name="appearance_tab">Внешний вид</string>
+    <string name="system_tab">Системные</string>
+    <string name="spinner_settings">Спиннеры</string>
+    <string name="spinner_color">Цвет спиннеров</string>
+    <string name="spinner_corner_radius">Закругление спиннеров</string>
+    <string name="background_color">Цвет фона</string>
+    <string name="card_background_color">Цвет карточек</string>
+    <string name="reset_to_default">Сбросить</string>
+    <string name="fuel_tab">Топливо</string>
+    <string name="fuel_settings">Настройки топлива</string>
+    <string name="summer_months">Летние месяцы</string>
+    <string name="summer_months_description">Выберите месяцы, которые считаются летними. Остальные месяцы будут зимними.</string>
+    <string name="zubov_fuel_consumption">Расход топлива - Зубов</string>
+    <string name="skd_fuel_consumption">Расход топлива - СКД</string>
+    <string name="summer_fuel">Лето (кг/час)</string>
+    <string name="winter_fuel">Зима (кг/час)</string>
+    <string name="fuel_consumption_hint">Введите расход топлива</string>
+    <string name="month_january">Январь</string>
+    <string name="month_february">Февраль</string>
+    <string name="month_march">Март</string>
+    <string name="month_april">Апрель</string>
+    <string name="month_may">Май</string>
+    <string name="month_june">Июнь</string>
+    <string name="month_july">Июль</string>
+    <string name="month_august">Август</string>
+    <string name="month_september">Сентябрь</string>
+    <string name="month_october">Октябрь</string>
+    <string name="month_november">Ноябрь</string>
+    <string name="month_december">Декабрь</string>
+    <string name="btn_make_an_entry">Внести запись</string>
+
 </resources>

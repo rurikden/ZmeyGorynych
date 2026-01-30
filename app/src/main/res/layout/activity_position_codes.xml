@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/colorBackground"
     tools:context=".PositionCodeActivity">
 
         <androidx.cardview.widget.CardView
@@ -34,15 +34,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:hint="Сокращение (ПМСГ, ПМСЗ, etc.)"
-                    app:boxStrokeColor="@color/black"
-                    app:hintTextColor="@color/black">
+                    app:boxStrokeColor="?attr/colorPrimary"
+                    app:hintTextColor="?attr/colorOnSurfaceVariant">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etShortCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapCharacters"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnBackground" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,15 +51,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:hint="Полное название должности"
-                    app:boxStrokeColor="@color/black"
-                    app:hintTextColor="@color/black">
+                    app:boxStrokeColor="?attr/colorPrimary"
+                    app:hintTextColor="?attr/colorOnSurfaceVariant">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etFullTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnBackground" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,15 +68,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:hint="Категория (ПМС, ПЧ, etc.)"
-                    app:boxStrokeColor="@color/black"
-                    app:hintTextColor="@color/black">
+                    app:boxStrokeColor="?attr/colorPrimary"
+                    app:hintTextColor="?attr/colorOnSurfaceVariant">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapCharacters"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/colorOnBackground" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

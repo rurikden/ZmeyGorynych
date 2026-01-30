@@ -9,28 +9,28 @@
     tools:context=".WorkDayActivity">
 
     <!-- Основной контент -->
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingBottom="24dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main"
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingBottom="24dp">
+            android:layout_margin="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp"
-                app:cardUseCompatPadding="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.5" />
+                        app:layout_constraintGuide_percent="0.2" />
 
                     <!-- Текст с выбранной датой -->
                     <TextView
@@ -81,144 +81,151 @@
                             android:padding="16dp">
 
                             <!-- Зубов -->
-                            <TextView
-                                android:id="@+id/tvZubov"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:text="Зубов"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <Spinner
-                                android:id="@+id/spinnerZubov"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilZubov"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@+id/tvZubov"
+                                android:hint="Зубов"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tvZubov" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                    android:id="@+id/spinnerZubov"
+                                    style="@style/CustomSpinnerStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- СКД -->
-                            <TextView
-                                android:id="@+id/tvSkd"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:text="СКД"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/spinnerZubov" />
-
-                            <Spinner
-                                android:id="@+id/spinnerSkd"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilSkd"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@+id/tvSkd"
+                                android:hint="СКД"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvZubov" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tilZubov">
+
+                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                    android:id="@+id/spinnerSkd"
+                                    style="@style/CustomSpinnerStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Машинист -->
-                            <TextView
-                                android:id="@+id/tvMachinist"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:text="Машинист"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/spinnerSkd" />
-
-                            <Spinner
-                                android:id="@+id/spinnerMachinist"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilMachinist"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@+id/tvMachinist"
+                                android:hint="Машинист"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvSkd" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tilSkd">
+
+                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                    android:id="@+id/spinnerMachinist"
+                                    style="@style/CustomSpinnerStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Машинист (второй) -->
-                            <TextView
-                                android:id="@+id/tvMachinist2"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:text="Машинист"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/spinnerMachinist" />
-
-                            <Spinner
-                                android:id="@+id/spinnerMachinist2"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilMachinist2"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@+id/tvMachinist2"
+                                android:hint="Машинист 2"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/spinnerMachinist" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tilMachinist">
+
+                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                    android:id="@+id/spinnerMachinist2"
+                                    style="@style/CustomSpinnerStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Руководитель -->
-                            <TextView
-                                android:id="@+id/tvManager"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:text="Руководитель"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/spinnerMachinist2" />
-
-                            <Spinner
-                                android:id="@+id/spinnerManager"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilManager"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@+id/tvManager"
+                                android:hint="Руководитель"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvMachinist2" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tilMachinist2">
+
+                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                    android:id="@+id/spinnerManager"
+                                    style="@style/CustomSpinnerStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Перегон 1 -->
-                            <TextView
-                                android:id="@+id/tvPeregon1"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:text="Перегон"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/spinnerManager" />
-
-                            <Spinner
-                                android:id="@+id/spinnerPeregon1"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilPeregon1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@+id/tvPeregon1"
+                                android:hint="Перегон 1"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvManager" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tilManager">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPeregon1"
+                                    style="@style/CustomSpinnerStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Перегон 2 -->
-                            <TextView
-                                android:id="@+id/tvPeregon2"
-                                android:layout_width="110dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:text="Перегон"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/spinnerPeregon1" />
-
-                            <Spinner
-                                android:id="@+id/spinnerPeregon2"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilPeregon2"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintStart_toEndOf="@+id/tvPeregon2"
+                                android:hint="Перегон 2"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvPeregon1" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tilPeregon1">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPeregon2"
+                                    style="@style/CustomSpinnerStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -228,8 +235,8 @@
                         android:id="@+id/cardTimeParams"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="6dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -241,416 +248,350 @@
                             android:layout_height="wrap_content"
                             android:padding="16dp">
 
-                            <!-- Вертикальная направляющая для выравнивания времени -->
-                            <androidx.constraintlayout.widget.Guideline
-                                android:id="@+id/guidelineTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:layout_constraintGuide_percent="0.35" />
-
-                            <!-- Заголовок -->
+                            <!-- Заголовок карточки времени -->
                             <TextView
-                                android:id="@+id/tvTimeTitle"
+                                android:id="@+id/tvTimeCardTitle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:gravity="center"
                                 android:text="Время работы"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <!-- Окно 1: с -->
-                            <TextView
-                                android:id="@+id/tvWindowLabel1"
-                                android:layout_width="0dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilWindowFrom1"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:text="Окно с"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
+                                android:hint="Окно с"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvTimeTitle" />
+                                app:layout_constraintTop_toBottomOf="@id/tvTimeCardTitle">
 
-                            <TextView
-                                android:id="@+id/tvWindowFrom1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvWindowLabel1" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etWindowFrom1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Окно 1: до -->
-                            <TextView
-                                android:id="@+id/tvWindowLabel2"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="Окно до"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvWindowLabel1" />
-
-                            <TextView
-                                android:id="@+id/tvWindowTo1"
-                                android:layout_width="wrap_content"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilWindowTo1"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvWindowLabel2" />
+                                android:hint="Окно до"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilWindowFrom1"
+                                app:layout_constraintTop_toTopOf="@id/tilWindowFrom1">
 
-                            <TextView
-                                android:id="@+id/tvWindowHours1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="@id/tvWindowTo1"
-                                app:layout_constraintStart_toEndOf="@id/tvWindowTo1"
-                                app:layout_constraintTop_toTopOf="@id/tvWindowTo1" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etWindowTo1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Окно 2: с -->
-                            <TextView
-                                android:id="@+id/tvWindowLabel3"
-                                android:layout_width="0dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilWindowFrom2"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="Окно с"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvWindowLabel2" />
+                                android:layout_marginStart="16dp"
+                                android:hint="Окно с"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilWindowTo1"
+                                app:layout_constraintTop_toTopOf="@id/tilWindowFrom1">
 
-                            <TextView
-                                android:id="@+id/tvWindowFrom2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvWindowLabel3" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etWindowFrom2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Окно 2: до -->
-                            <TextView
-                                android:id="@+id/tvWindowLabel4"
-                                android:layout_width="0dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilWindowTo2"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="Окно до"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvWindowLabel3" />
+                                android:layout_marginStart="8dp"
+                                android:hint="Окно до"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilWindowFrom2"
+                                app:layout_constraintTop_toTopOf="@id/tilWindowFrom2">
 
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etWindowTo2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- СУММА часов окон -->
                             <TextView
-                                android:id="@+id/tvWindowTo2"
+                                android:id="@+id/tvWindowHoursSum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvWindowLabel4" />
-
-                            <TextView
-                                android:id="@+id/tvWindowHours2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
+                                android:text="ч"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="@id/tvWindowTo2"
-                                app:layout_constraintStart_toEndOf="@id/tvWindowTo2"
-                                app:layout_constraintTop_toTopOf="@id/tvWindowTo2" />
+                                app:layout_constraintBottom_toBottomOf="@id/tilWindowTo2"
+                                app:layout_constraintStart_toEndOf="@id/tilWindowTo2"
+                                app:layout_constraintTop_toTopOf="@id/tilWindowTo2" />
 
                             <!-- СКД 1: с -->
-                            <TextView
-                                android:id="@+id/tvSkdLabel1"
-                                android:layout_width="0dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilSkdFrom1"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:text="СКД с"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
+                                android:layout_marginTop="16dp"
+                                android:hint="СКД с"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvWindowLabel4" />
+                                app:layout_constraintTop_toBottomOf="@id/tilWindowFrom1">
 
-                            <TextView
-                                android:id="@+id/tvSkdFrom1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvSkdLabel1" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etSkdFrom1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- СКД 1: до -->
-                            <TextView
-                                android:id="@+id/tvSkdLabel2"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="СКД до"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvSkdLabel1" />
-
-                            <TextView
-                                android:id="@+id/tvSkdTo1"
-                                android:layout_width="wrap_content"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilSkdTo1"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvSkdLabel2" />
+                                android:hint="СКД до"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilSkdFrom1"
+                                app:layout_constraintTop_toTopOf="@id/tilSkdFrom1">
 
-                            <TextView
-                                android:id="@+id/tvSkdHours1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="@id/tvSkdTo1"
-                                app:layout_constraintStart_toEndOf="@id/tvSkdTo1"
-                                app:layout_constraintTop_toTopOf="@id/tvSkdTo1" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etSkdTo1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- СКД 2: с -->
-                            <TextView
-                                android:id="@+id/tvSkdLabel3"
-                                android:layout_width="0dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilSkdFrom2"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="СКД с"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvSkdLabel2" />
+                                android:layout_marginStart="16dp"
+                                android:hint="СКД с"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilSkdTo1"
+                                app:layout_constraintTop_toTopOf="@id/tilSkdFrom1">
 
-                            <TextView
-                                android:id="@+id/tvSkdFrom2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvSkdLabel3" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etSkdFrom2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- СКД 2: до -->
-                            <TextView
-                                android:id="@+id/tvSkdLabel4"
-                                android:layout_width="0dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilSkdTo2"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="СКД до"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvSkdLabel3" />
+                                android:layout_marginStart="8dp"
+                                android:hint="СКД до"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilSkdFrom2"
+                                app:layout_constraintTop_toTopOf="@id/tilSkdFrom2">
 
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etSkdTo2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- СУММА часов СКД -->
                             <TextView
-                                android:id="@+id/tvSkdTo2"
+                                android:id="@+id/tvSkdHoursSum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvSkdLabel4" />
-
-                            <TextView
-                                android:id="@+id/tvSkdHours2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
+                                android:text="ч"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="@id/tvSkdTo2"
-                                app:layout_constraintStart_toEndOf="@id/tvSkdTo2"
-                                app:layout_constraintTop_toTopOf="@id/tvSkdTo2" />
+                                app:layout_constraintBottom_toBottomOf="@id/tilSkdTo2"
+                                app:layout_constraintStart_toEndOf="@id/tilSkdTo2"
+                                app:layout_constraintTop_toTopOf="@id/tilSkdTo2" />
 
                             <!-- Зубов 1: с -->
-                            <TextView
-                                android:id="@+id/tvZubovLabel1"
-                                android:layout_width="0dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilZubovFrom1"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:text="Зубов с"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
+                                android:layout_marginTop="16dp"
+                                android:hint="Зубов с"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvSkdLabel4" />
+                                app:layout_constraintTop_toBottomOf="@id/tilSkdFrom1">
 
-                            <TextView
-                                android:id="@+id/tvZubovFrom1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvZubovLabel1" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etZubovFrom1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1"
+                                    android:textSize="12sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Зубов 1: до -->
-                            <TextView
-                                android:id="@+id/tvZubovLabel2"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="Зубов до"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvZubovLabel1" />
-
-                            <TextView
-                                android:id="@+id/tvZubovTo1"
-                                android:layout_width="wrap_content"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilZubovTo1"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvZubovLabel2" />
+                                android:hint="Зубов до"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilZubovFrom1"
+                                app:layout_constraintTop_toTopOf="@id/tilZubovFrom1">
 
-                            <TextView
-                                android:id="@+id/tvZubovHours1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="@id/tvZubovTo1"
-                                app:layout_constraintStart_toEndOf="@id/tvZubovTo1"
-                                app:layout_constraintTop_toTopOf="@id/tvZubovTo1" />
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etZubovTo1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1"
+                                    android:textSize="12sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <!-- Зубов 2: с -->
-                            <TextView
-                                android:id="@+id/tvZubovLabel3"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="Зубов с"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvZubovLabel2" />
-
-                            <TextView
-                                android:id="@+id/tvZubovFrom2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvZubovLabel3" />
-
-                            <!-- Зубов 2: до -->
-                            <TextView
-                                android:id="@+id/tvZubovLabel4"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="Зубов до"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:gravity="center_vertical"
-                                app:layout_constraintEnd_toStartOf="@id/guidelineTime"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tvZubovLabel3" />
-
-                            <TextView
-                                android:id="@+id/tvZubovTo2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/date_background"
-                                android:gravity="center"
-                                android:padding="6dp"
-                                android:text="--:--"
-                                android:minWidth="72dp"
-                                app:layout_constraintStart_toStartOf="@id/guidelineTime"
-                                app:layout_constraintTop_toTopOf="@id/tvZubovLabel4" />
-
-                            <TextView
-                                android:id="@+id/tvZubovHours2"
-                                android:layout_width="wrap_content"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilZubovFrom2"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
+                                android:hint="Зубов с"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilZubovTo1"
+                                app:layout_constraintTop_toTopOf="@id/tilZubovFrom1">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etZubovFrom2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1"
+                                    android:textSize="12sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- Зубов 2: до -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilZubovTo2"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:hint="Зубов до"
+                                app:boxStrokeColor="?attr/colorPrimary"
+                                app:hintTextColor="?attr/colorOnSurfaceVariant"
+                                app:layout_constraintStart_toEndOf="@id/tilZubovFrom2"
+                                app:layout_constraintTop_toTopOf="@id/tilZubovFrom2">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etZubovTo2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:maxLines="1"
+                                    android:textSize="12sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- СУММА часов зубов -->
+                            <TextView
+                                android:id="@+id/tvZubovHoursSum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="ч"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="@id/tvZubovTo2"
-                                app:layout_constraintStart_toEndOf="@id/tvZubovTo2"
-                                app:layout_constraintTop_toTopOf="@id/tvZubovTo2" />
+                                app:layout_constraintBottom_toBottomOf="@id/tilZubovTo2"
+                                app:layout_constraintStart_toEndOf="@id/tilZubovTo2"
+                                app:layout_constraintTop_toTopOf="@id/tilZubovTo2" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -658,25 +599,24 @@
                     <!-- Кнопка Запись -->
                     <Button
                         android:id="@+id/btnSave"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_width="200dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
                         android:background="@drawable/button_ok_background"
-                        android:text="Запись"
+                        android:text="@string/btn_make_an_entry"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cardWorkParams" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            </ScrollView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

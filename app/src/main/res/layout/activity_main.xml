@@ -13,7 +13,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="?attr/colorBackground">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -22,7 +22,7 @@
             android:text="Змей Горыныч"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnBackground"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +41,6 @@
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- Кнопка 'Открыть меню' удалена -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

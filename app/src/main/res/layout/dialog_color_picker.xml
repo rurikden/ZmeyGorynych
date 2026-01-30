@@ -1,127 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="0dp">
 
+    <!-- Заголовок -->
     <TextView
         android:id="@+id/tvColorPickerTitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="Выберите цвет"
-        android:textColor="@color/black"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/colorPreview"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/color_preview_background" />
+    <!-- Контейнер для предпросмотра и круга (горизонтальный) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/colorSelectionContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvColorPickerTitle">
 
-    <TextView
+        <!-- Превью цвета (слева) -->
+        <View
+            android:id="@+id/colorPreview"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/color_preview_background"
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Цветовое колесо (справа) -->
+        <com.example.zmeygorynych.ColorWheelView
+            android:id="@+id/colorWheel"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/colorPreview"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="250dp"
+            app:layout_constraintWidth_percent="0.6"
+            android:contentDescription="Color wheel for selecting hue and saturation" />
+
+        <!-- Подпись под превью -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Превью"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/colorPreview"
+            app:layout_constraintStart_toStartOf="@id/colorPreview"
+            app:layout_constraintTop_toBottomOf="@id/colorPreview" />
+
+        <!-- Подпись под колесом -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Цветовой круг"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/colorWheel"
+            app:layout_constraintStart_toStartOf="@id/colorWheel"
+            app:layout_constraintTop_toBottomOf="@id/colorWheel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Guideline разделяет верхнюю (цвет) и нижнюю (слайдеры) части -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:text="@string/color_wheel"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
 
-    <com.example.zmeygorynych.ColorWheelView
-        android:id="@+id/colorWheel"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="24dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:text="@string/fine_tune"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!-- Контейнер для слайдеров с ScrollView -->
+    <ScrollView
+        android:id="@+id/slidersScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/hue"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline">
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/hueSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:labelBehavior="floating"
-        android:valueFrom="0"
-        android:valueTo="360" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/saturation"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Точная настройка"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/saturationSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:labelBehavior="floating"
-        android:valueFrom="0"
-        android:valueTo="100" />
+            <!-- Оттенок -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Оттенок"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/brightness"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
+            <com.google.android.material.slider.Slider
+                android:id="@+id/hueSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:valueFrom="0"
+                android:valueTo="360"
+                app:labelBehavior="gone" />
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/valueSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        app:labelBehavior="floating"
-        android:valueFrom="0"
-        android:valueTo="100" />
+            <!-- Насыщенность -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Насыщенность"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
+            <com.google.android.material.slider.Slider
+                android:id="@+id/saturationSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:valueFrom="0"
+                android:valueTo="100"
+                android:value="100"
+                app:labelBehavior="gone" />
+
+            <!-- Яркость -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Яркость"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/valueSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:valueFrom="0"
+                android:valueTo="100"
+                android:value="100"
+                app:labelBehavior="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Панель кнопок (всегда внизу) -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/buttonsLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="?attr/colorPrimary"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/cancel"
+            android:background="?attr/colorPrimaryVariant"
+            android:text="Отмена"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/btnOk"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:text="@string/ok"
+            android:background="?attr/colorPrimaryVariant"
+            android:text="ОК"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
-
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
